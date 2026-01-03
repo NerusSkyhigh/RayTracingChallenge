@@ -113,12 +113,12 @@ TEST_CASE("Multiplying a matrix by a tuple") {
 
     Tuple b(1, 2, 3, 1);
 
-    Matrix result = a * b;
+    Tuple result = a * b;
 
-    REQUIRE(result.at(0, 0) == 18);
-    REQUIRE(result.at(1, 0) == 24);
-    REQUIRE(result.at(2, 0) == 33);
-    REQUIRE(result.at(3, 0) == 1);
+    REQUIRE(result.x == 18);
+    REQUIRE(result.y == 24);
+    REQUIRE(result.z == 33);
+    REQUIRE(result.w == 1);
 }
 
 TEST_CASE("Multiplying a matrix by the identity matrix") {

@@ -21,7 +21,7 @@ private:
     std::vector<double> data;
 
 public:
-    const int size;
+    int size;
 
     Matrix(const int size) : size(size) {
         data = std::vector<double>(size*size, 0.0);
@@ -73,20 +73,21 @@ public:
         return result;
     }
 
-    Matrix operator*(const Tuple& t) {
+    /**
+     * @brief Matrix times Tuple: y=M*x
+     * @param t
+     * @return
+     */
+    Tuple operator*(const Tuple& t) const {
         assert(APPROX_EQUAL(this->size, 4.0));
 
-        Matrix result(this->size);
-        for (int row = 0; row < this->size; row++) {
-            double sum = 0.0;
-            sum += this->at(row, 0) * t.x;
-            sum += this->at(row, 1) * t.y;
-            sum += this->at(row, 2) * t.z;
-            sum += this->at(row, 3) * t.w;
-            result.at(row, 0) = sum;
-        }
+        double x, y, z, w;
+        x = this->at(0,0) * t.x + this->at(0,1) * t.y + this->at(0,2) * t.z + this->at(0,3) * t.w;
+        y = this->at(1,0) * t.x + this->at(1,1) * t.y + this->at(1,2) * t.z + this->at(1,3) * t.w;
+        z = this->at(2,0) * t.x + this->at(2,1) * t.y + this->at(2,2) * t.z + this->at(2,3) * t.w;
+        w = this->at(3,0) * t.x + this->at(3,1) * t.y + this->at(3,2) * t.z + this->at(3,3) * t.w;
 
-        return result;
+        return Tuple(x, y, z, w);
     }
 
     Matrix transpose() {
@@ -204,5 +205,18 @@ public:
         }
         return id;
     }
+
+    static Matrix translation(const double x, const double y, const double z);
+
+    static Matrix scaling(const double x, const double y, const double z);
+
+    static Matrix rotationX(const double radians);
+    static Matrix rotationY(const double radians);
+    static Matrix rotationZ(const double radians);
+
+    static Matrix shearing(const double xy, const double xz,
+                            const double yx, const double yz,
+                            const double zx, const double zy);
+
 
 };

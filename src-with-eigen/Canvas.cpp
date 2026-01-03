@@ -1,24 +1,27 @@
 //
 // Created by Gugli on 30/12/2025.
 //
+
 #include <string>
 #include <algorithm>
-#include <fstream>
+
+#include <Eigen/Dense>
 
 #include "Canvas.h"
 
 
 
-std::string Canvas::ToPPMString() {
+
+std::string Canvas::ToPPMString(const Canvas& canvas) {
     std::string ppm;
     ppm += "P3\n";
-    ppm += std::to_string(this->width) + " " + std::to_string(this->height) + "\n";
+    ppm += std::to_string(canvas.width) + " " + std::to_string(canvas.height) + "\n";
     ppm += "255\n";
 
-    for (int y = 0; y < this->height; y++) {
+    for (int y = 0; y < canvas.height; y++) {
         std::string line;
-        for (int x = 0; x < this->width; x++) {
-            Color pixel = this->pixelAt(x, y);
+        for (int x = 0; x < canvas.width; x++) {
+            Color pixel = canvas.pixelAt(x, y);
 
             // Clamp the color values to [0, 1] and scale to [0, 255]
             int r = static_cast<int>(std::round(std::clamp(pixel.r, 0.0, 1.0) * 255));
@@ -52,13 +55,4 @@ std::string Canvas::ToPPMString() {
     }
 
     return ppm;
-}
-
-void Canvas::ToPPMFile(std::string fileName) {
-    std::string ppm = ToPPMString();
-
-    // Save canvas to file
-    std::ofstream outFile(fileName);
-    outFile << ppm;
-    outFile.close();
 }

@@ -29,7 +29,7 @@ TEST_CASE("Write and Read a pixel") {
 
 TEST_CASE("Constructing the PPM header") {
     Canvas c(5, 3);
-    std::string ppm = Canvas::canvasToPPM(c);
+    std::string ppm = c.ToPPMString();
     std::string expectedHeader =
         "P3\n"
         "5 3\n"
@@ -45,7 +45,7 @@ TEST_CASE("Constructing the PPM pixel data") {
     c.writePixel(0, 0, c1);
     c.writePixel(2, 1, c2);
     c.writePixel(4, 2, c3);
-    std::string ppm = Canvas::canvasToPPM(c);
+    std::string ppm = c.ToPPMString();
     std::string expectedPixels =
         "P3\n"
         "5 3\n"
@@ -64,7 +64,7 @@ TEST_CASE("Splitting long lines in PPM files") {
             c.writePixel(x, y, color);
         }
     }
-    std::string ppm = Canvas::canvasToPPM(c);
+    std::string ppm = c.ToPPMString();
     std::string expectedPixels =
         "P3\n"
         "10 2\n"

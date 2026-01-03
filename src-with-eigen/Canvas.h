@@ -3,32 +3,32 @@
 //
 #pragma once
 
-#include <vector>
 #include <string>
 
-#include "Color.h"
+#include <Eigen/Dense>
+
+#include "../src/Color.h"
 
 class Canvas {
 public:
     const int width;
     const int height;
 
-    std::vector<Color> pixels;
+    // Pixels are stored in a eigen matrix
+    Eigen::Matrix<Color, Eigen::Dynamic, Eigen::Dynamic> pixels;
 
     Canvas(const int width, const int height) : width(width), height(height) {
-        pixels = std::vector<Color>(width * height, Color(0, 0, 0));
+        pixels = Eigen::Matrix<Color, Eigen::Dynamic, Eigen::Dynamic>(height, width);
     }
 
     void writePixel(const int x, const int y, const Color &color) {
-        pixels[y * width + x] = color;
+        pixels(y, x) = color;
     }
 
     Color pixelAt(const int x, const int y) const {
-        return pixels[y * width + x];
+        return pixels(y, x);
     }
 
     // [TODO] Save to file
-    std::string ToPPMString();
-
-    void ToPPMFile(std::string fileName);
+    static std::string ToPPMString(const Canvas &canvas);
 };

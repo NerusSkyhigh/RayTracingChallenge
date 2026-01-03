@@ -14,6 +14,9 @@ add_executable(raytracer_tests
         Color.test.cpp
         Canvas.test.cpp
         Matrix.test.cpp
+        Ray.test.cpp
+        Intersections.test.cpp
+        Sphere.test.cpp
 )
 
 target_link_libraries(raytracer_tests
