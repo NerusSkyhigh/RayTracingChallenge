@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 
-#include "Color.h"
+#include "renderer/Color.h"
 
 class Canvas {
 public:

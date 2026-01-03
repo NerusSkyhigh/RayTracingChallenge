@@ -1,7 +1,7 @@
 #include "catch2/catch_test_macros.hpp"
 
-#include "Matrix.h"
-#include "Tuple.h"
+#include "linalg/Tuple.h"
+#include "linalg/Matrix.h"
 
 TEST_CASE("Constructing and inspecting a 4x4 matrix") {
 

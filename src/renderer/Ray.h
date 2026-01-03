@@ -3,10 +3,11 @@
 //
 #pragma once
 
-#include "Tuple.h"
-#include "Sphere.h"
-#include "Intersection.h"
-#include "Matrix.h"
+#include "linalg/Tuple.h"
+#include "linalg/Matrix.h"
+#include "shapes/Sphere.h"
+#include "shapes/Intersections.h"
+
 
 
 class Ray {

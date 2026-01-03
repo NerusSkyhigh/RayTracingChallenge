@@ -17,6 +17,7 @@ add_executable(raytracer_tests
         Ray.test.cpp
         Intersections.test.cpp
         Sphere.test.cpp
+        Hit.test.cpp
 )
 
 target_link_libraries(raytracer_tests

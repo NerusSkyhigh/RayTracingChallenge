@@ -2,9 +2,10 @@
 // Created by Gugli on 03/01/2026.
 //
 #pragma once
-#include "Tuple.h"
+#include "linalg/Tuple.h"
+#include "linalg/Matrix.h"
 #include "Shape.h"
-#include "Matrix.h"
+
 
 class Sphere : public Shape {
 public:

@@ -1,7 +1,7 @@
-#include "Ray.h"
+#include "../src/renderer/Ray.h"
 #include "catch2/catch_test_macros.hpp"
 
-#include "Sphere.h"
+#include "../src/shapes/Sphere.h"
 
 TEST_CASE("A sphere default transform") {
     Sphere s(1.0);

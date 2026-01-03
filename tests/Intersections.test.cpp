@@ -1,8 +1,8 @@
 #include "catch2/catch_test_macros.hpp"
 
-#include "Ray.h"
-#include "Sphere.h"
-#include "Intersection.h"
+#include "renderer/Ray.h"
+#include "shapes/Sphere.h"
+#include "shapes/Intersections.h"
 
 
 TEST_CASE("A ray intersects a sphere at two points") {
@@ -65,53 +65,4 @@ TEST_CASE("An intersection encapsulates t and object") {
 
     REQUIRE(APPROX_EQUAL(intersection.solutions[0], 3.5));
     REQUIRE(intersection.shape == &sphere);
-}
-
-TEST_CASE("The hit, when all intersections have positive t") {
-    Sphere sphere(1.0);
-    Intersections intersections(sphere);
-    intersections.addSolution(1.0);
-    intersections.addSolution(2.0);
-
-    Intersections hit = Intersections::hit(intersections);
-
-    REQUIRE(hit.size == 1);
-    REQUIRE(APPROX_EQUAL(hit.solutions[0], 1.0));
-}
-
-TEST_CASE("The hit, when some intersections have negative t") {
-    Sphere sphere(1.0);
-    Intersections intersections(sphere);
-    intersections.addSolution(-1.0);
-    intersections.addSolution(1.0);
-
-    Intersections hit = Intersections::hit(intersections);
-
-    REQUIRE(hit.size == 1);
-    REQUIRE(APPROX_EQUAL(hit.solutions[0], 1.0));
-}
-
-TEST_CASE("The hit, when all intersections have negative t") {
-    Sphere sphere(1.0);
-    Intersections intersections(sphere);
-    intersections.addSolution(-2.0);
-    intersections.addSolution(-1.0);
-
-    Intersections hit = Intersections::hit(intersections);
-
-    REQUIRE(hit.size == 0);
-}
-
-TEST_CASE("The hit is the lowest non-negative intersection") {
-    Sphere sphere(1.0);
-    Intersections intersections(sphere);
-    intersections.addSolution(5.0);
-    intersections.addSolution(7.0);
-    intersections.addSolution(-3.0);
-    intersections.addSolution(2.0);
-
-    Intersections hit = Intersections::hit(intersections);
-
-    REQUIRE(hit.size == 1);
-    REQUIRE(APPROX_EQUAL(hit.solutions[0], 2.0));
 }

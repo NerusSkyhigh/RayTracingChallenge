@@ -1,3 +1,6 @@
+# Images generated during tests
+*.ppm
+
 # Resource from the book
 jbtracer-code
 

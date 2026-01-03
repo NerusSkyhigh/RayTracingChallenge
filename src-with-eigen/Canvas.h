@@ -7,7 +7,7 @@
 
 #include <Eigen/Dense>
 
-#include "../src/Color.h"
+#include "../src/renderer/Color.h"
 
 class Canvas {
 public:

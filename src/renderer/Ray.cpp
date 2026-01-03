@@ -3,8 +3,8 @@
 //
 
 #include "Ray.h"
-#include "Intersection.h"
-#include "Sphere.h"
+#include "shapes/Intersections.h"
+#include "shapes/Sphere.h"
 
 /*
 Intersections Ray::intersect(const Sphere& sphere) const {

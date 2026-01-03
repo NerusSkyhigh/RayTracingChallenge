@@ -2,7 +2,7 @@
 // Created by Guglielmo Grillo on 30/12/2025.
 //
 #include <catch2/catch_test_macros.hpp>
-#include "tuple.h"
+#include "../src/linalg/Tuple.h"
 
 TEST_CASE("A tuple with w=1 is a point") {
     Tuple p = Tuple(4.3, -4.2, 3.1, 1.);

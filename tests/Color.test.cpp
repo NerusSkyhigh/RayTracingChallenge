@@ -2,7 +2,7 @@
 // Created by Guglielmo Grillo on 30/12/2025.
 //
 #include <catch2/catch_test_macros.hpp>
-#include "Color.h"
+#include "../src/renderer/Color.h"
 
 TEST_CASE("Color equality with floating point precision") {
     Color c1 = Color(0.1 + 0.2, 0.3, 0.4);
