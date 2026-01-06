@@ -5,7 +5,7 @@
 #include "shapes/Hit.h"
 
 TEST_CASE("The hit, when all intersections have positive t") {
-    Sphere sphere(1.0);
+    Sphere sphere;
     Intersections intersections(sphere);
     intersections.addSolution(1.0);
     intersections.addSolution(2.0);
@@ -23,7 +23,7 @@ TEST_CASE("The hit, when all intersections have positive t") {
 
 
 TEST_CASE("The hit, when some intersections have negative t") {
-    Sphere sphere(1.0);
+    Sphere sphere;
     Intersections intersections(sphere);
     intersections.addSolution(-1.0);
     intersections.addSolution(1.0);
@@ -39,7 +39,7 @@ TEST_CASE("The hit, when some intersections have negative t") {
 }
 
 TEST_CASE("The hit, when all intersections have negative t") {
-    Sphere sphere(1.0);
+    Sphere sphere;
     Intersections intersections(sphere);
     intersections.addSolution(-2.0);
     intersections.addSolution(-1.0);
@@ -57,7 +57,7 @@ TEST_CASE("The hit, when all intersections have negative t") {
 
 
 TEST_CASE("The hit is the lowest non-negative intersection") {
-    Sphere sphere(1.0);
+    Sphere sphere;
     Intersections intersections(sphere);
     intersections.addSolution(5.0);
     intersections.addSolution(7.0);

@@ -1,13 +1,20 @@
+//
+// Created by Gugli on 04/01/2026.
+//
+
 #include <omp.h>
 #include <iostream>
 
-#include <cassert>
+#include <cmath>
+#include <numbers>
 #include <fstream>
 
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
 #include "renderer/Canvas.h"
 #include "renderer/Ray.h"
+#include "renderer/Material.h"
+#include "renderer/PointLight.h"
 #include "shapes/Sphere.h"
 #include "shapes/Hit.h"
 
@@ -40,6 +47,7 @@ Tuple CanvasWorldToPixel(Tuple worldPos, Canvas canvas, Tuple canvasCenter, doub
     return Tuple::point(x, y, canvasCenter.z);
 }
 
+
 int main() {
     // Set up the canvas as a rectangle parallel to the xy plane
     // at z = 10, width = 7 [world units], height = 7 [world units]
@@ -51,15 +59,15 @@ int main() {
     Canvas canvas(sqrt(resolution), sqrt(resolution) );
 
     // Prepare the sphere to be drawn
-    Sphere sphere{};
-    //sphere.addTransform(Matrix::scaling(1, 2, 1));
-    //sphere.addTransform(Matrix::translation(canvas.width/2, canvas.height/2, 0));
+    Material material;
+    material.color = Color(1, 0.2, 1);
+    Sphere sphere(material);
+
+    // Add a light
+    PointLight light(Tuple::point(-10, 10, -10), Color(1, 1, 1));
 
     // Prepare the origin of the observer; direction will change based on the pixel being rendered
     Tuple observer = Tuple::point(0, 0, -5);
-
-    // Color of the sphere
-    Color red = Color::Red();
 
     #pragma omp parallel for schedule(static)
     for (int y = 0; y < canvas.height; y++) {
@@ -73,14 +81,15 @@ int main() {
             Hit worldHit = Hit::find(intersections, ray);
 
             if (worldHit.isValid()) {
+                Color c = material.lighting(light, worldHit.point, -ray.direction, sphere.NormalAt(worldHit.point));
                 Tuple canvasHitPoint = CanvasWorldToPixel(worldHit.point, canvas, canvasCenter, pixelSize);
                 int X = static_cast<int>(canvasHitPoint.x);
                 int Y = static_cast<int>(canvasHitPoint.y);
-                canvas.writePixel(X, Y, red);
+                canvas.writePixel(X, Y, c);
             }
         }
     }
-    canvas.ToPPMFile("../cp5_sphere.ppm");
+    canvas.ToPPMFile("../cp6_LightingSphere.ppm");
 
 
     return 0;

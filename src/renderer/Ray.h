@@ -45,4 +45,6 @@ public:
         Tuple newDirection = m * direction;
         return Ray(newOrigin, newDirection);
     }
+
+
 };

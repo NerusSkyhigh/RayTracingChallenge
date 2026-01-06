@@ -17,7 +17,7 @@ public:
     const Shape* shape;
 
 
-    Intersections(const Shape& shape) : size(0), solutions(), shape(&shape) {}
+    Intersections(const Shape& shape) : size(0), shape(&shape) {}
 
     void addSolution(const double t) {
         solutions.push_back(t);

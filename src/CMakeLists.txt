@@ -6,11 +6,16 @@ add_library(linalg
 
 # ------------ Renderer Library -------------
 add_library(renderer
-    renderer/Color.cpp
-    renderer/Canvas.cpp
+        renderer/Color.cpp
+        renderer/Canvas.cpp
+        renderer/Material.cpp
+        renderer/PointLight.cpp
+        renderer/Ray.cpp
+        renderer/World.cpp
+        renderer/World.h
 )
 target_link_libraries(renderer
-    linalg
+        linalg
 )
 target_include_directories(renderer
     PUBLIC
@@ -20,10 +25,9 @@ target_include_directories(renderer
 
 #------------- Shapes Library -------------
 add_library(shapes
-    shapes/Shape.h
-    shapes/Sphere.cpp
+        shapes/Sphere.cpp
         shapes/Hit.cpp
-        shapes/Hit.h
+        shapes/Intersections.cpp
 )
 target_link_libraries(shapes
     linalg
@@ -33,25 +37,25 @@ target_include_directories(shapes
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_library(raytracer
-        renderer/Ray.cpp
-        renderer/Ray.h
-        shapes/Intersections.h
-)
+
 #---------------- END ----------------
+add_library(raytracer
+        INTERFACE
+)
 
 target_link_libraries(raytracer
+        INTERFACE
         linalg
         renderer
         shapes
 )
 
 target_include_directories(raytracer
-        PUBLIC
+        INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_compile_features(raytracer
-        PUBLIC
+        INTERFACE
         cxx_std_20
 )

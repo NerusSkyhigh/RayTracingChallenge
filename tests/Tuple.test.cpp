@@ -90,3 +90,18 @@ TEST_CASE("Cross product") {
     REQUIRE(result1 == Tuple::vector(-1, 2, -1));
     REQUIRE(result2 == -result1);
 }
+
+TEST_CASE("Reflecting a vector approaching at 45°") {
+    Tuple v = Tuple::vector(1, -1, 0);
+    Tuple n = Tuple::vector(0, 1, 0);
+    Tuple r = v.reflect(n);
+    REQUIRE(r == Tuple::vector(1, 1, 0));
+}
+
+TEST_CASE("Reflecting a vector off a slander surface") {
+    Tuple v = Tuple::vector(0, -1, 0);
+    Tuple n = Tuple::vector(std::sqrt(2)/2, std::sqrt(2)/2, 0);
+    Tuple r = v.reflect(n);
+    REQUIRE(r == Tuple::vector(1, 0, 0));
+}
+

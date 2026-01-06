@@ -8,6 +8,8 @@ option(BUILD_TESTING "Build tests" ON)
 
 add_subdirectory(src)
 
+find_package(OpenMP REQUIRED)
+
 if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(tests)
@@ -28,6 +30,15 @@ add_executable(cp5_sphere
     img/cp5_sphere.cpp
 )
 target_link_libraries(cp5_sphere
+    PRIVATE
+    raytracer
+    OpenMP::OpenMP_CXX
+)
+
+add_executable(cp6_LightingSphere
+    img/cp6_LightingSphere.cpp
+)
+target_link_libraries(cp6_LightingSphere
     PRIVATE
     raytracer
 )

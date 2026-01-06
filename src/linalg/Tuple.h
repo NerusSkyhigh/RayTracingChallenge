@@ -37,7 +37,9 @@ public:
      * @param z z-coordinate of the point
      * @return Tuple representing a point (w=1)
      */
-    static Tuple point(const double x, const double y, const double z);
+    static Tuple point(const double x, const double y, const double z) {
+        return Tuple{x, y, z, 1.};
+    }
 
     /** @brief Create a vector Tuple with the given x, y, z components.
      * @param x x-component of the vector
@@ -45,7 +47,9 @@ public:
      * @param z z-component of the vector
      * @return Tuple representing a vector (w=0)
      */
-    static Tuple vector(const double x, const double y, const double z);
+    static Tuple vector(const double x, const double y, const double z) {
+        return Tuple{x, y, z, 0.};
+    }
 
 
     bool is_vector() const {
@@ -194,6 +198,10 @@ public:
         double newY = this->z * other.x - this->x * other.z;
         double newZ = this->x * other.y - this->y * other.x;
         return Tuple::vector(newX, newY, newZ);
+    }
+
+    Tuple reflect(const Tuple &normal) const {
+        return *this - normal * 2 * this->dot(normal);
     }
 
 };

@@ -7,7 +7,7 @@
 
 TEST_CASE("A ray intersects a sphere at two points") {
     Ray ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
-    Sphere sphere(1.0);
+    Sphere sphere;
 
     Intersections intersection = ray.intersect(sphere);
 
@@ -18,7 +18,7 @@ TEST_CASE("A ray intersects a sphere at two points") {
 
 TEST_CASE("A ray intersects a sphere at a tangent") {
     Ray ray(Tuple::point(0, 1, -5), Tuple::vector(0, 0, 1));
-    Sphere sphere(1.0);
+    Sphere sphere;
 
     Intersections intersection = ray.intersect(sphere);
 
@@ -29,7 +29,7 @@ TEST_CASE("A ray intersects a sphere at a tangent") {
 
 TEST_CASE("A ray misses a sphere") {
     Ray ray(Tuple::point(0, 2, -5), Tuple::vector(0, 0, 1));
-    Sphere sphere(1.0);
+    Sphere sphere;
 
     Intersections intersection = ray.intersect(sphere);
 
@@ -38,7 +38,7 @@ TEST_CASE("A ray misses a sphere") {
 
 TEST_CASE("A ray originates inside a sphere") {
     Ray ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
-    Sphere sphere(1.0);
+    Sphere sphere;
 
     Intersections intersection = ray.intersect(sphere);
 
@@ -49,7 +49,7 @@ TEST_CASE("A ray originates inside a sphere") {
 
 TEST_CASE("A sphere is behind a ray") {
     Ray ray(Tuple::point(0, 0, 5), Tuple::vector(0, 0, 1));
-    Sphere sphere(1.0);
+    Sphere sphere;
 
     Intersections intersection = ray.intersect(sphere);
 
@@ -59,7 +59,7 @@ TEST_CASE("A sphere is behind a ray") {
 }
 
 TEST_CASE("An intersection encapsulates t and object") {
-    Sphere sphere(1.0);
+    Sphere sphere;
     Intersections intersection(sphere);
     intersection.addSolution(3.5);
 

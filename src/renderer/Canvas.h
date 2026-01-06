@@ -9,6 +9,7 @@
 #include "renderer/Color.h"
 
 class Canvas {
+
 public:
     const int width;
     const int height;
@@ -31,4 +32,6 @@ public:
     std::string ToPPMString();
 
     void ToPPMFile(std::string fileName);
+
+
 };

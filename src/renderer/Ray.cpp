@@ -32,14 +32,17 @@ Intersections Ray::intersect(const Sphere& sphere) const {
     return intersection;
 }*/
 
+
+// [TODO] Handle transformed spheres here
+// modifiy the code to handle only unitary spheres centered at the origin
 Intersections Ray::intersect(const Sphere& sphere) const {
     Intersections intersection(sphere);
 
-    Tuple sphereToRay = origin - sphere.origin;
+    Tuple sphereToRay = origin - Tuple::point(0, 0, 0); // Sphere at origin
 
-    double a = direction.dot(direction);
+    double a = direction.norm2();
     double b = 2 * direction.dot(sphereToRay);
-    double c = sphereToRay.dot(sphereToRay) - sphere.radius * sphere.radius;
+    double c = sphereToRay.dot(sphereToRay) - 1.0; // Unit sphere radius = 1
 
     double discriminant = b * b - 4 * a * c;
 
