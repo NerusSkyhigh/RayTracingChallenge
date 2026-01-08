@@ -2,6 +2,7 @@ add_library(linalg
         linalg/macros.h
         linalg/Tuple.cpp
         linalg/Matrix.cpp
+        linalg/ViewTransform.h
 )
 
 # ------------ Renderer Library -------------
@@ -13,6 +14,8 @@ add_library(renderer
         renderer/Ray.cpp
         renderer/World.cpp
         renderer/World.h
+        renderer/Camera.cpp
+        renderer/Camera.h
 )
 target_link_libraries(renderer
         linalg
@@ -26,7 +29,6 @@ target_include_directories(renderer
 #------------- Shapes Library -------------
 add_library(shapes
         shapes/Sphere.cpp
-        shapes/Hit.cpp
         shapes/Intersections.cpp
 )
 target_link_libraries(shapes

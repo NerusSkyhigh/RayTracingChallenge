@@ -16,7 +16,6 @@
 #include "renderer/Material.h"
 #include "renderer/PointLight.h"
 #include "shapes/Sphere.h"
-#include "shapes/Hit.h"
 
 
 Tuple CanvasPixelToWorld(int x, int y, Canvas canvas, Tuple canvasCenter, double pixelSize) {
@@ -53,7 +52,7 @@ int main() {
     // at z = 10, width = 7 [world units], height = 7 [world units]
     Tuple canvasCenter = Tuple::point(0, 0, 10);
     double canvasSide = 7.0;
-    double resolution = 256.0 * 256.0;
+    double resolution = 256.0 * 256.0*9;
     double pixelSize = canvasSide / std::sqrt(resolution);
 
     Canvas canvas(sqrt(resolution), sqrt(resolution) );
@@ -62,12 +61,13 @@ int main() {
     Material material;
     material.color = Color(1, 0.2, 1);
     Sphere sphere(material);
+    sphere.addTransform(Matrix::scaling(1, 1, 1)*6);
 
     // Add a light
     PointLight light(Tuple::point(-10, 10, -10), Color(1, 1, 1));
 
     // Prepare the origin of the observer; direction will change based on the pixel being rendered
-    Tuple observer = Tuple::point(0, 0, -5);
+    Tuple observer = Tuple::point(0, 0, -500);
 
     #pragma omp parallel for schedule(static)
     for (int y = 0; y < canvas.height; y++) {
@@ -77,10 +77,12 @@ int main() {
             Tuple direction = (pixelWorldPos - observer).normalize();
             Ray ray(observer, direction);
 
-            Intersections intersections = ray.transform(sphere.transform.inverse()).intersect(sphere);
-            Hit worldHit = Hit::find(intersections, ray);
+            Intersections xs;
+            //Intersections xs = ray.transform(sphere.GetInverseTransform()).intersect(sphere);
+            sphere.intersect(ray, xs);
+            Hit worldHit = xs.GetHit();
 
-            if (worldHit.isValid()) {
+            if (worldHit.valid) {
                 Color c = material.lighting(light, worldHit.point, -ray.direction, sphere.NormalAt(worldHit.point));
                 Tuple canvasHitPoint = CanvasWorldToPixel(worldHit.point, canvas, canvasCenter, pixelSize);
                 int X = static_cast<int>(canvasHitPoint.x);

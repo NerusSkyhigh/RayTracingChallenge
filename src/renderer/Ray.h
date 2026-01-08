@@ -5,8 +5,6 @@
 
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
-#include "shapes/Sphere.h"
-#include "shapes/Intersections.h"
 
 
 
@@ -31,14 +29,6 @@ public:
     Tuple cast(double t) const {
         return origin + direction * t;
     }
-
-    /**
-     * @brief Detects intersections of the ray with a sphere of radius 1 centered at the origin
-     * @param sphere
-     * @return
-     */
-    Intersections intersect(const Sphere& sphere) const;
-
 
     Ray transform(const Matrix& m) const {
         Tuple newOrigin = m * origin;

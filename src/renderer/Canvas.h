@@ -6,10 +6,12 @@
 #include <vector>
 #include <string>
 
+#include "World.h"
 #include "renderer/Color.h"
+#include "renderer/World.h"
+#include "shapes/Intersections.h"
 
 class Canvas {
-
 public:
     const int width;
     const int height;
@@ -19,6 +21,7 @@ public:
     Canvas(const int width, const int height) : width(width), height(height) {
         pixels = std::vector<Color>(width * height, Color(0, 0, 0));
     }
+
 
     void writePixel(const int x, const int y, const Color &color) {
         pixels[y * width + x] = color;

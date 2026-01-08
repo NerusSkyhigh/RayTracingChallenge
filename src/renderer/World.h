@@ -13,32 +13,43 @@
 #include "Material.h"
 #include "shapes/Sphere.h"
 #include "shapes/Intersections.h"
-#include "Ray.h"
+
 
 class World {
 public:
     std::vector<PointLight> pointLights;
     std::vector<std::unique_ptr<Shape>> objects;
 
-    World() {
-        pointLights.emplace_back(
-            Tuple::point(-10, 10, -10),
-            Color(1.0, 1.0, 1.0)
-        );
+    World() {}
 
-        auto s1 = std::make_unique<Sphere>(
-            Material(Color(0.8,1.0,0.6), 0.1, 0.7, 0.2, 200.0)
-        );
-        objects.push_back(std::move(s1));
+    Color shadeHit(const Hit& hit) const;
 
-        auto s2 = std::make_unique<Sphere>();
-        s2->setTransform(Matrix::scaling(0.5, 0.5, 0.5));
-        objects.push_back(std::move(s2));
+    static World defaultWorld();
+
+    Color colorAt(const Ray& ray) const {
+        Intersections xs;
+        for (const auto& object : objects) {
+            object->intersect(ray, xs);
+        }
+
+        Hit hit = xs.GetHit();
+        if (hit.valid) {
+            return shadeHit(hit);
+        } else {
+            return Color(0, 0, 0); // Background color
+        }
     }
 
-    Intersections intersect(Ray ray) {
-        // I need a way to properly intersect a ray with an object
-        // Chapter 7
+    void addObject(std::unique_ptr<Shape> shape) {
+        objects.push_back(std::move(shape));
+    }
+
+    void resetLights() {
+        pointLights.clear();
+    }
+
+    void addPointLight(const PointLight& pointLight) {
+        pointLights.push_back(pointLight);
     }
 
 };

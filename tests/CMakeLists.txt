@@ -21,6 +21,8 @@ add_executable(raytracer_tests
         PointLight.test.cpp
         Material.test.cpp
         World.test.cpp
+        ViewTransform.test.cpp
+        Camera.test.cpp
 )
 
 target_link_libraries(raytracer_tests

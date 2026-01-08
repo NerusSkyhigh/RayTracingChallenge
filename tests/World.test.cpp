@@ -2,10 +2,12 @@
 
 #include "linalg/Matrix.h"
 #include "renderer/Material.h"
+#include "renderer/Ray.h"
 #include "renderer/World.h"
+#include "shapes/Intersections.h"
 
 TEST_CASE("Creating a default world") {
-    World w;
+    World w = World::defaultWorld();
 
     REQUIRE(w.pointLights.size() == 1);
     REQUIRE(w.pointLights[0].position == Tuple::point(-10, 10, -10));
@@ -17,4 +19,88 @@ TEST_CASE("Creating a default world") {
     REQUIRE(w.objects[0]->GetMaterial() == expectedMaterial);
 
     REQUIRE(w.objects[1]->GetTransform() == Matrix::scaling(0.5, 0.5, 0.5));
+}
+
+
+TEST_CASE("Shading an intersection") {
+    World world = World::defaultWorld();
+
+    Tuple rayOrigin = Tuple::point(0, 0, -5);
+    Tuple rayDirection = Tuple::vector(0, 0, 1);
+    Ray ray(rayOrigin, rayDirection);
+
+    Intersections xs;
+    world.objects[0]->intersect(ray, xs);
+    Hit hit = xs.GetHit();
+
+    Color color = world.shadeHit(hit);
+
+    REQUIRE(color == Color(0.38066, 0.47583, 0.2855));
+}
+
+
+TEST_CASE("Shading an intersection from the inside") {
+    World w = World::defaultWorld();
+    w.pointLights.clear();
+    w.pointLights.emplace_back(
+        Tuple::point(0, 0.25, 0),
+        Color(1, 1, 1)
+    );
+
+    Tuple rayOrigin = Tuple::point(0, 0, 0);
+    Tuple rayDirection = Tuple::vector(0, 0, 1);
+    Ray ray(rayOrigin, rayDirection);
+
+    Intersections xs;
+    w.objects[1]->intersect(ray, xs);
+    Hit hit = xs.GetHit();
+
+    Color color = w.shadeHit(hit);
+
+    REQUIRE(color == Color(0.90498, 0.90498, 0.90498));
+}
+
+TEST_CASE("The color when a ray misses") {
+    World world = World::defaultWorld();
+
+    Tuple rayOrigin = Tuple::point(0, 0, -5);
+    Tuple rayDirection = Tuple::vector(0, 1, 0);
+    Ray ray(rayOrigin, rayDirection);
+
+    Color color = world.colorAt(ray);
+
+    REQUIRE(color == Color(0, 0, 0));
+}
+
+TEST_CASE("The color when a ray hits") {
+    World world = World::defaultWorld();
+
+    Tuple rayOrigin = Tuple::point(0, 0, -5);
+    Tuple rayDirection = Tuple::vector(0, 0, 1);
+    Ray ray(rayOrigin, rayDirection);
+
+    Color color = world.colorAt(ray);
+
+    REQUIRE(color == Color(0.38066, 0.47583, 0.2855));
+}
+
+TEST_CASE("The color with an intersection behind the ray") {
+    World world = World::defaultWorld();
+
+    // Modify the second sphere to be behind the ray
+    Material mat1 = world.objects[0]->GetMaterial();
+    mat1.ambient = 1.0;
+    world.objects[0]->SetMaterial(mat1);
+
+    Material mat2 = world.objects[1]->GetMaterial();
+    mat2.ambient = 1.0;
+    world.objects[1]->SetMaterial(mat2);
+
+    Tuple rayOrigin = Tuple::point(0, 0, 0.75);
+    Tuple rayDirection = Tuple::vector(0, 0, -1);
+    Ray ray(rayOrigin, rayDirection);
+
+    Color color = world.colorAt(ray);
+
+    REQUIRE(color == world.objects[1]->material.color);
 }

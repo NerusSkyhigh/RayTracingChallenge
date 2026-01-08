@@ -12,7 +12,7 @@ TEST_CASE("A sphere default transform") {
 TEST_CASE("Changing a sphere's transform") {
     Sphere s;
     Matrix translation = Matrix::translation(2, 3, 4);
-    s.setTransform(translation);
+    s.SetTransform(translation);
     REQUIRE(s.transform == translation);
 }
 
@@ -22,13 +22,14 @@ TEST_CASE("Intersecting a scaled sphere with a ray") {
     Ray ray(rayOrigin, rayDirection);
 
     Sphere sphere;
-    sphere.setTransform(Matrix::scaling(2, 2, 2));
+    sphere.SetTransform(Matrix::scaling(2, 2, 2));
 
-    Intersections intersection = ray.transform( sphere.transform.inverse()).intersect(sphere);
+    Intersections xs;
+    sphere.intersect(ray, xs);
 
-    REQUIRE(intersection.size == 2);
-    REQUIRE(APPROX_EQUAL(intersection.solutions[0], 3.0));
-    REQUIRE(APPROX_EQUAL(intersection.solutions[1], 7.0));
+    REQUIRE(xs.size == 2);
+    REQUIRE(APPROX_EQUAL(xs[0].t, 3.0));
+    REQUIRE(APPROX_EQUAL(xs[1].t, 7.0));
 }
 
 TEST_CASE("Intersecting a translated sphere with a ray") {
@@ -37,11 +38,13 @@ TEST_CASE("Intersecting a translated sphere with a ray") {
     Ray ray(rayOrigin, rayDirection);
 
     Sphere sphere;
-    sphere.setTransform(Matrix::translation(5, 0, 0));
+    sphere.SetTransform(Matrix::translation(5, 0, 0));
 
-    Intersections intersection = ray.transform( sphere.transform.inverse()).intersect(sphere);
+    Intersections xs;
+    Ray transformedRay = ray.transform( sphere.transform.inverse());
+    sphere.intersect(transformedRay, xs);
 
-    REQUIRE(intersection.size == 0);
+    REQUIRE(xs.size == 0);
 }
 
 TEST_CASE("Computing the normal on a sphere at a point on the x axis") {

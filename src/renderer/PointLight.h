@@ -13,4 +13,5 @@ public:
     Color intensity;
 
     PointLight(const Tuple &position, const Color &intensity) : position(position), intensity(intensity) {}
+    PointLight() : position(Tuple::point(0, 0, 0)), intensity(Color::Black()) {}
 };

@@ -22,6 +22,8 @@ class Tuple {
 public:
     double x, y, z, w;
 
+    Tuple() : x(0), y(0), z(0), w(0) {}
+
     /** @brief Construct a new Tuple object from the given x, y, z, w values.
      * @param x x-coordinate of the tuple
      * @param y y-coordinate of the tuple

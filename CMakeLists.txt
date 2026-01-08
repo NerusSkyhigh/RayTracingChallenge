@@ -42,3 +42,11 @@ target_link_libraries(cp6_LightingSphere
     PRIVATE
     raytracer
 )
+
+add_executable(cp7_Scene
+    img/cp7_Scene.cpp
+)
+target_link_libraries(cp7_Scene
+    PRIVATE
+    raytracer
+)
