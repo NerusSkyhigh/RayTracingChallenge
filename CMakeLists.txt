@@ -36,7 +36,8 @@ target_link_libraries(cp5_sphere
 )
 
 add_executable(cp6_LightingSphere
-    img/cp6_LightingSphere.cpp
+    #img/cp6_LightingSphere.cpp
+    img/cp6_LightingSphereCameraVersion.cpp
 )
 target_link_libraries(cp6_LightingSphere
     PRIVATE

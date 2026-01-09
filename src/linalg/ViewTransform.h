@@ -24,6 +24,11 @@ public:
                       transform(Matrix::identity(4)),
                       itransform(Matrix::identity(4)) {}
 
+    /**@brief Constructs a view transformation matrix given the camera position, target point, and up vector
+     * @param from Camera position in world space
+     * @param to Target point in world space
+     * @param upVector Up vector defining the camera's orientation
+     */
     ViewTransform(const Tuple& from, const Tuple& to, const Tuple& upVector) {
 
         this->forward = (to - from).normalize();
