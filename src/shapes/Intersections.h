@@ -18,7 +18,7 @@ struct Hit {
     Tuple eyev;
     Tuple normalv;
     bool valid;
-    bool inside = true;
+    bool inside; // True if inside and the normal is inverted
 };
 
 
@@ -40,8 +40,8 @@ public:
             sorted = false;
         }
 
+        // Outside of a shape, the normal and the vector to the go in the same half plane
         bool inside = normalv.dot(eyev) < 0;
-
         Tuple normal = inside ? -normalv : normalv;
 
         hits.emplace_back(Hit{t, &shape, point, eyev, normal, true, inside});
@@ -80,7 +80,7 @@ public:
             }
         }
 
-        if (hits[minIdx].t < 0) {
+        if (hits[minIdx].t <= 0) {
             return -1; // No non-negative intersections
         }
 

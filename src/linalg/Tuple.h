@@ -203,7 +203,7 @@ public:
     }
 
     Tuple reflect(const Tuple &normal) const {
-        return *this - normal * 2 * this->dot(normal);
+        return *this - normal * 2. * this->dot(normal);
     }
 
 };

@@ -2,7 +2,6 @@
 // Created by Gugli on 04/01/2026.
 //
 
-#include <omp.h>
 #include <iostream>
 
 #include <cmath>
@@ -40,8 +39,8 @@ Tuple CanvasWorldToPixel(Tuple worldPos, Canvas canvas, Tuple canvasCenter, doub
     double x = (worldPos.x - canvasWorldOriginX) / pixelSize - 0.5;
     double y = (canvasWorldOriginY - worldPos.y) / pixelSize - 0.5;
 
-    assert(y >= 0 && y < canvas.height);
-    assert(x >= 0 && x < canvas.width);
+    //assert(y >= 0 && y < canvas.height);
+    //assert(x >= 0 && x < canvas.width);
 
     return Tuple::point(x, y, canvasCenter.z);
 }
@@ -52,7 +51,7 @@ int main() {
     // at z = 10, width = 7 [world units], height = 7 [world units]
     Tuple canvasCenter = Tuple::point(0, 0, 10);
     double canvasSide = 7.0;
-    double resolution = 256.0 * 256.0*9;
+    double resolution = 128*128;
     double pixelSize = canvasSide / std::sqrt(resolution);
 
     Canvas canvas(sqrt(resolution), sqrt(resolution) );
@@ -61,15 +60,14 @@ int main() {
     Material material;
     material.color = Color(1, 0.2, 1);
     Sphere sphere(material);
-    sphere.addTransform(Matrix::scaling(1, 1, 1)*6);
+    sphere.addTransform(Matrix::scaling(1, 1, 1));
 
     // Add a light
     PointLight light(Tuple::point(-10, 10, -10), Color(1, 1, 1));
 
     // Prepare the origin of the observer; direction will change based on the pixel being rendered
-    Tuple observer = Tuple::point(0, 0, -500);
+    Tuple observer = Tuple::point(0, 0, -5);
 
-    #pragma omp parallel for schedule(static)
     for (int y = 0; y < canvas.height; y++) {
         for (int x = 0; x < canvas.width; x++) {
 

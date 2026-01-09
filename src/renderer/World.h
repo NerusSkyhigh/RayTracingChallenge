@@ -33,11 +33,7 @@ public:
         }
 
         Hit hit = xs.GetHit();
-        if (hit.valid) {
-            return shadeHit(hit);
-        } else {
-            return Color(0, 0, 0); // Background color
-        }
+        return shadeHit(hit);
     }
 
     void addObject(std::unique_ptr<Shape> shape) {

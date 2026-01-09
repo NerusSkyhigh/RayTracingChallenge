@@ -107,7 +107,7 @@ int main() {
     world.addPointLight(light);
 
 
-    Camera camera(400, 200, M_PI / 3);
+    Camera camera(800, 400, M_PI / 3);
     ViewTransform viewTransform = ViewTransform(
         Tuple::point(0, 1.5, -5),
         Tuple::point(0, 1, 0),

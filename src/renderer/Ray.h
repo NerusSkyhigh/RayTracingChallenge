@@ -11,7 +11,7 @@
 class Ray {
 public:
     Tuple origin;
-    Tuple direction;
+    Tuple direction; /// Versor indicating the ray's direction; normalization is NOT enforced to allow for rays to encode information about scaling
 
     Ray(Tuple direction) : origin(Tuple::point(0, 0, 0)), direction(direction) {}
 

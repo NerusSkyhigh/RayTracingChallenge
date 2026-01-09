@@ -70,3 +70,46 @@ TEST_CASE("The hit is the lowest non-negative intersection") {
     REQUIRE(hit.valid);
     REQUIRE(APPROX_EQUAL(hit.t, 2.0));
 }
+
+TEST_CASE("Precomputing the state of an intersection") {
+    Ray ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+    Sphere sphere;
+
+    Intersections xs;
+    sphere.intersect(ray, xs);
+
+    Hit hit = xs[0];
+
+    REQUIRE(hit.object == &sphere);
+    REQUIRE(APPROX_EQUAL(hit.t, 4.0));
+    REQUIRE(hit.point == Tuple::point(0, 0, -1));
+    REQUIRE(hit.eyev == Tuple::vector(0, 0, -1));
+    REQUIRE(hit.normalv == Tuple::vector(0, 0, -1));
+}
+
+TEST_CASE("The hit, when an intersection occurs on the outside") {
+    Ray ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+    Sphere sphere;
+
+    Intersections xs;
+    sphere.intersect(ray, xs);
+
+    Hit hit = xs[0];
+
+    REQUIRE(!hit.inside);
+}
+
+TEST_CASE("The hit, when an intersection occurs on the inside") {
+    Ray ray(Tuple::point(0, 0, 0), Tuple::vector(0, 0, 1));
+    Sphere sphere;
+
+    Intersections xs;
+    sphere.intersect(ray, xs);
+
+    Hit hit = xs.GetHit();
+
+    REQUIRE(hit.point == Tuple::point(0, 0, 1));
+    REQUIRE(hit.eyev == Tuple::vector(0, 0, -1));
+    REQUIRE(hit.normalv == Tuple::vector(0, 0, -1));
+    REQUIRE(hit.inside);
+}

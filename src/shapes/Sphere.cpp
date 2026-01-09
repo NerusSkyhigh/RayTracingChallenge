@@ -34,9 +34,10 @@ void Sphere::intersect(const Ray& ray, Intersections& xs) const {
     Tuple n1 = this->NormalAt(ipoint1);
     Tuple n2 = this->NormalAt(ipoint2);
 
-    xs.add(*this, t1,
-             ipoint1,  -ray.direction, n1 );
+    // Vector from intersection to eye; it goes in the opposite direction of the ray
+    // I think I should not normalize the vector as it encodes scaling information
+    Tuple eyev = -ray.direction;
 
-    xs.add(*this, t2,
-            ipoint2, -ray.direction, n2 );
+    xs.add(*this, t1, ipoint1, eyev, n1 );
+    xs.add(*this, t2, ipoint2, eyev, n2 );
 }

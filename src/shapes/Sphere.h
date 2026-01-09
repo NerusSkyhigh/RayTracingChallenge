@@ -56,19 +56,31 @@ public:
     }
 
     /**@brief Computes the normal vector at point p on the unit sphere centered at the origin
-     * @param p
+     * @param worldPoint
      * @return
      */
-    Tuple NormalAt(Tuple p) const {
+    Tuple NormalAt(Tuple worldPoint) const {
         // I have to subtract the sphere's center from p, even though
         // it's the origin because p is a point and not a vector.
         // The difference between two points gives the correct
         // value of w for a vector.
 
-        Tuple n = p - Tuple::point(0, 0, 0);
-        Matrix transform = this->transform.inverse().transpose();
+        ///Tuple n = p - Tuple::point(0, 0, 0);
+        //Matrix transform = this->GetInverseTransform().transpose();
+        //return (transform * n).normalize();
 
-        return (transform * n).normalize();
+        Tuple objectPoint = this->GetInverseTransform() * worldPoint;
+        Tuple objectNormal = objectPoint - Tuple::point(0, 0, 0);
+        Tuple worldNormal = this->GetInverseTransform().transpose() * objectNormal;
+        worldNormal.w = 0;
+        worldNormal = worldNormal.normalize();
+
+        return worldNormal;
+
+        //Tuple n = p - Tuple::point(0, 0, 0);
+        //Matrix transform = this->GetInverseTransform().transpose();
+        //return transform * n.normalize();
+
     }
 
     void SetMaterial(const Material& m) override {

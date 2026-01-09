@@ -36,29 +36,35 @@ public:
     }
 
     Color lighting(const PointLight& light, const Tuple& position, const Tuple& eyev, const Tuple& normalv) const {
+
+        // Combine the surface color with the light's color/intensity
         Color effectiveColor = this->color.hadamard(light.intensity);
+
+        // Ambient component (assumed to be uniform across the surface)
+        Color ambientComponent = effectiveColor * this->ambient;
 
         // Direction to the light source
         Tuple lightv = (light.position - position).normalize();
-        Color ambientComponent = effectiveColor * this->ambient;
 
         // Cosine of the angle between the light vector and the normal vector
-        double cosLv = lightv.dot(normalv);
-        Color diffuseComponent = Color::Black();
+        double lightDotNormal = lightv.dot(normalv);
+
+        // Initialize diffuse and specular components to black
+        // They will remain black if the light is on the other side of the surface (lightDotNormal <= 0)
+        Color diffuseComponent  = Color::Black();
         Color specularComponent = Color::Black();
 
-        if (cosLv > 0) {
-            diffuseComponent = effectiveColor * this->diffuse * cosLv;
+        if (lightDotNormal > 0) {
+            diffuseComponent = effectiveColor * this->diffuse * lightDotNormal;
 
+            // Light reflected from the object around the normal
             Tuple reflectv = (-lightv).reflect(normalv);
 
             // Cosine of the angle between the reflection vector and the eye vector
-            double cosRE = reflectv.dot(eyev);
+            double reflecDotEye = reflectv.dot(eyev);
 
-            if (cosRE <= 0) {
-                specularComponent = Color(0, 0, 0);
-            } else {
-                double factor = std::pow(cosRE, this->shininess);
+            if (reflecDotEye > 0) {
+                double factor = std::pow(reflecDotEye, this->shininess);
                 specularComponent = light.intensity * this->specular * factor;
             }
         }
