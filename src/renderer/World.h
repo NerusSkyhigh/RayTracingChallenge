@@ -22,6 +22,7 @@ public:
 
     World() {}
 
+    bool isShadowed(const Tuple& point, const PointLight& pointLight) const;
     Color shadeHit(const Hit& hit) const;
 
     static World defaultWorld();

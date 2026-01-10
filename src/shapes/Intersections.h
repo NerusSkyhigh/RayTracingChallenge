@@ -15,6 +15,7 @@ struct Hit {
     double t;
     const Shape* object;
     Tuple point;
+    Tuple overPoint;
     Tuple eyev;
     Tuple normalv;
     bool valid;
@@ -43,8 +44,17 @@ public:
         // Outside of a shape, the normal and the vector to the go in the same half plane
         bool inside = normalv.dot(eyev) < 0;
         Tuple normal = inside ? -normalv : normalv;
+        Tuple overPoint = point + normal * EPSILON;
 
-        hits.emplace_back(Hit{t, &shape, point, eyev, normal, true, inside});
+        hits.emplace_back(Hit{
+            t,
+            &shape,
+            point,
+            overPoint,
+            eyev, normal,
+            true,
+            inside
+        });
         size++;
     }
 
@@ -98,7 +108,7 @@ public:
         } else {
             // Return an invalid intersection if no hit is found
             Tuple o = Tuple::point(0,0,0);
-            return Hit(0, nullptr, o, o, o, false);
+            return Hit(0, nullptr, o, o, o, o, false);
         }
     }
 

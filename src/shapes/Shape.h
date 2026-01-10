@@ -12,7 +12,6 @@
 class Shape {
 
 public:
-    Material material;
 
     virtual ~Shape() = default;
 
@@ -28,5 +27,9 @@ public:
     virtual void SetMaterial(const Material& material) = 0;
     virtual Material GetMaterial() const = 0;
 
+    virtual Tuple NormalAt(const Tuple& worldPoint) const = 0;
+
     virtual void intersect(const Ray& ray, Intersections& xs) const = 0;
+
+    virtual bool operator==(const Shape&) const = 0;
 };

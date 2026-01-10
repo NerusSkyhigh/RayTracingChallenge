@@ -23,6 +23,7 @@ add_executable(raytracer_tests
         World.test.cpp
         ViewTransform.test.cpp
         Camera.test.cpp
+        Plane.test.cpp
 )
 
 target_link_libraries(raytracer_tests

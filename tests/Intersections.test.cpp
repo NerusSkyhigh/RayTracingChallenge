@@ -73,3 +73,16 @@ TEST_CASE("An intersection encapsulates t and object") {
     REQUIRE(APPROX_EQUAL(xs[0].t, 3.5));
     REQUIRE(xs[0].object == &sphere);
 }
+
+TEST_CASE("The hit should offset the point") {
+    Ray ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
+    Sphere sphere;
+    sphere.SetTransform(Matrix::translation(0, 0, 1));
+
+    Intersections xs;
+    sphere.intersect(ray, xs);
+    Hit hit = xs.GetHit();
+
+    REQUIRE(hit.overPoint.z < -EPSILON / 2);
+    REQUIRE(hit.point.z > hit.overPoint.z);
+}

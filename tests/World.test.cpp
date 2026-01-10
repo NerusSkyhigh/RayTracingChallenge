@@ -102,5 +102,33 @@ TEST_CASE("The color with an intersection behind the ray") {
 
     Color color = world.colorAt(ray);
 
-    REQUIRE(color == world.objects[1]->material.color);
+    REQUIRE(color == world.objects[1]->GetMaterial().color);
+}
+
+TEST_CASE("There is no shadow when nothing is collinear with point and light") {
+    World world = World::defaultWorld();
+    Tuple point = Tuple::point(0, 10, 0);
+
+    REQUIRE_FALSE(world.isShadowed(point, world.pointLights[0]));
+}
+
+TEST_CASE("The shadow when an object is between the point and the light") {
+    World world = World::defaultWorld();
+    Tuple point = Tuple::point(10, -10, 10);
+
+    REQUIRE(world.isShadowed(point, world.pointLights[0]));
+}
+
+TEST_CASE("There is no shadow when an object is behind the light") {
+    World world = World::defaultWorld();
+    Tuple point = Tuple::point(-20, 20, -20);
+
+    REQUIRE_FALSE(world.isShadowed(point, world.pointLights[0]));
+}
+
+TEST_CASE("There is no shadow when an object is behind the point") {
+    World world = World::defaultWorld();
+    Tuple point = Tuple::point(-2, 2, -2);
+
+    REQUIRE_FALSE(world.isShadowed(point, world.pointLights[0]));
 }

@@ -8,14 +8,14 @@
 TEST_CASE("A sphere default transform") {
     Sphere sphere;
     Matrix identity = Matrix::identity(4);
-    REQUIRE(sphere.transform == identity);
+    REQUIRE(sphere.GetTransform() == identity);
 }
 
 TEST_CASE("Changing a sphere's transform") {
     Sphere s;
     Matrix translation = Matrix::translation(2, 3, 4);
     s.SetTransform(translation);
-    REQUIRE(s.transform == translation);
+    REQUIRE(s.GetTransform() == translation);
 }
 
 TEST_CASE("Intersecting a scaled sphere with a ray") {
@@ -43,7 +43,7 @@ TEST_CASE("Intersecting a translated sphere with a ray") {
     sphere.SetTransform(Matrix::translation(5, 0, 0));
 
     Intersections xs;
-    Ray transformedRay = ray.transform( sphere.transform.inverse());
+    Ray transformedRay = ray.transform( sphere.GetInverseTransform());
     sphere.intersect(transformedRay, xs);
 
     REQUIRE(xs.size == 0);
@@ -117,7 +117,7 @@ TEST_CASE("Computing the normal on a transformed sphere") {
 TEST_CASE("A sphere has a default material") {
     Sphere s;
     Material m;
-    REQUIRE(s.material == m);
+    REQUIRE(s.GetMaterial() == m);
 }
 
 TEST_CASE("A sphere may be assigned a material") {
@@ -125,5 +125,5 @@ TEST_CASE("A sphere may be assigned a material") {
     Material m;
     m.ambient = 1.0;
     s.SetMaterial(m);
-    REQUIRE(s.material == m);
+    REQUIRE(s.GetMaterial() == m);
 }

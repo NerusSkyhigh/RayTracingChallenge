@@ -35,13 +35,17 @@ public:
         return sameColor && sameAmbient && sameDiffuse && sameSpecular && sameShininess;
     }
 
-    Color lighting(const PointLight& light, const Tuple& position, const Tuple& eyev, const Tuple& normalv) const {
+    Color lighting(const PointLight& light, const Tuple& position, const Tuple& eyev, const Tuple& normalv, bool inShadow) const {
 
         // Combine the surface color with the light's color/intensity
         Color effectiveColor = this->color.hadamard(light.intensity);
 
         // Ambient component (assumed to be uniform across the surface)
         Color ambientComponent = effectiveColor * this->ambient;
+
+        if (inShadow) {
+            return ambientComponent;
+        }
 
         // Direction to the light source
         Tuple lightv = (light.position - position).normalize();

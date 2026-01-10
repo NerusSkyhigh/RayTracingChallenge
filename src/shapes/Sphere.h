@@ -13,12 +13,13 @@
  */
 class Sphere : public Shape {
 private:
+    Matrix transform;
     Matrix itransform;
+    Material material;
 
 public:
     Tuple origin; // [TODO] Set this to (0,0,0)
-    Matrix transform;
-    Material material;
+
 
     Sphere(): origin(Tuple::point(0,0,0)), transform(Matrix::identity(4)), itransform(Matrix::identity(4)) {}
 
@@ -27,7 +28,11 @@ public:
     Sphere(Material material) : origin(Tuple::point(0, 0, 0)), material(material), transform(Matrix::identity(4)), itransform(Matrix::identity(4)) {}
 
 
-    const bool operator==(const Sphere&) const {
+    bool operator==(const Shape& other) const override {
+        const Sphere* otherSphere = dynamic_cast<const Sphere*>(&other);
+        if (otherSphere == nullptr) {
+            return false;
+        }
         bool sameOrigin = this->origin == origin;
         bool sameTransform = this->transform == transform;
         return sameOrigin && sameTransform;
@@ -59,7 +64,7 @@ public:
      * @param worldPoint
      * @return
      */
-    Tuple NormalAt(Tuple worldPoint) const {
+    Tuple NormalAt(const Tuple& worldPoint) const override {
         // I have to subtract the sphere's center from p, even though
         // it's the origin because p is a point and not a vector.
         // The difference between two points gives the correct

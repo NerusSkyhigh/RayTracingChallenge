@@ -30,6 +30,8 @@ target_include_directories(renderer
 add_library(shapes
         shapes/Sphere.cpp
         shapes/Intersections.cpp
+        shapes/Plane.cpp
+        shapes/Plane.h
 )
 target_link_libraries(shapes
     linalg
