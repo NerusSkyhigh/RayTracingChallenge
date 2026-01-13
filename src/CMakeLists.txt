@@ -1,3 +1,4 @@
+# ---------------- linalg ----------------
 add_library(linalg
         linalg/macros.h
         linalg/Tuple.cpp
@@ -5,61 +6,56 @@ add_library(linalg
         linalg/ViewTransform.h
 )
 
-# ------------ Renderer Library -------------
-add_library(renderer
-        renderer/Color.cpp
-        renderer/Canvas.cpp
-        renderer/Material.cpp
-        renderer/PointLight.cpp
-        renderer/Ray.cpp
-        renderer/World.cpp
-        renderer/World.h
-        renderer/Camera.cpp
-        renderer/Camera.h
+target_include_directories(linalg PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+# ---------------- Geometry ----------------
+add_library(geometry
+        geometry/Ray.cpp
+        geometry/Intersections.cpp
+        geometry/Shape.h
+        geometry/Sphere.cpp
+        geometry/Plane.h
 )
-target_link_libraries(renderer
+
+target_link_libraries(geometry PUBLIC linalg)
+target_include_directories(geometry PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+# ---------------- Scene ----------------
+add_library(scene
+        scene/World.cpp
+        scene/PointLight.cpp
+        scene/material/Material.cpp
+        scene/pattern/Pattern.cpp
+        scene/pattern/StripePattern.cpp
+        scene/pattern/Monocromatic.cpp
+        scene/pattern/Monocromatic.h
+)
+
+target_link_libraries(scene PUBLIC geometry linalg)
+target_include_directories(scene PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+# ---------------- Render ----------------
+add_library(render
+        render/Color.cpp
+        render/Canvas.cpp
+        render/Camera.cpp
+)
+
+target_link_libraries(render PUBLIC scene geometry linalg)
+target_include_directories(render PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+# ---------------- Facade target ----------------
+add_library(raytracer INTERFACE)
+
+target_link_libraries(raytracer INTERFACE
         linalg
-)
-target_include_directories(renderer
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-)
-# ---------------- END ----------------
-
-#------------- Shapes Library -------------
-add_library(shapes
-        shapes/Sphere.cpp
-        shapes/Intersections.cpp
-        shapes/Plane.cpp
-        shapes/Plane.h
-)
-target_link_libraries(shapes
-    linalg
-)
-target_include_directories(shapes
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
+        geometry
+        scene
+        render
 )
 
-
-#---------------- END ----------------
-add_library(raytracer
-        INTERFACE
-)
-
-target_link_libraries(raytracer
-        INTERFACE
-        linalg
-        renderer
-        shapes
-)
-
-target_include_directories(raytracer
-        INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-target_compile_features(raytracer
-        INTERFACE
-        cxx_std_20
-)
+target_compile_features(raytracer INTERFACE cxx_std_20)

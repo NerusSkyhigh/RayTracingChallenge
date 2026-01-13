@@ -1,8 +1,8 @@
 #include "catch2/catch_test_macros.hpp"
 
-#include "renderer/Ray.h"
-#include "shapes/Sphere.h"
-#include "shapes/Intersections.h"
+#include "../src/geometry/Ray.h"
+#include "../src/geometry/Sphere.h"
+#include "../src/geometry/Intersections.h"
 
 TEST_CASE("The hit, when all intersections have positive t") {
     Sphere sphere;
@@ -13,8 +13,6 @@ TEST_CASE("The hit, when all intersections have positive t") {
 
     xs.add(sphere, 1.0, dummyTuple, dummyTuple, dummyTuple);
     xs.add(sphere, 2.0, dummyTuple, dummyTuple, dummyTuple);
-
-    xs.sort();
 
     Hit hit = xs.GetHit();
     REQUIRE(hit.valid);

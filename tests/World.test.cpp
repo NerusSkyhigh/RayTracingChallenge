@@ -1,10 +1,10 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "linalg/Matrix.h"
-#include "renderer/Material.h"
-#include "renderer/Ray.h"
-#include "renderer/World.h"
-#include "shapes/Intersections.h"
+#include "scene/material/Material.h"
+#include "geometry/Ray.h"
+#include "scene/World.h"
+#include "geometry/Intersections.h"
 
 TEST_CASE("Creating a default world") {
     World w = World::defaultWorld();
@@ -16,9 +16,9 @@ TEST_CASE("Creating a default world") {
     REQUIRE(w.objects.size() == 2);
 
     Material expectedMaterial(Color(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 200.0);
-    REQUIRE(w.objects[0]->GetMaterial() == expectedMaterial);
+    REQUIRE(w.objects[0]->getMaterial() == expectedMaterial);
 
-    REQUIRE(w.objects[1]->GetTransform() == Matrix::scaling(0.5, 0.5, 0.5));
+    REQUIRE(w.objects[1]->getTransform() == Matrix::scaling(0.5, 0.5, 0.5));
 }
 
 
@@ -88,13 +88,13 @@ TEST_CASE("The color with an intersection behind the ray") {
     World world = World::defaultWorld();
 
     // Modify the second sphere to be behind the ray
-    Material mat1 = world.objects[0]->GetMaterial();
-    mat1.ambient = 1.0;
-    world.objects[0]->SetMaterial(mat1);
+    Material mat1 = world.objects[0]->getMaterial();
+    mat1.setAmbient(1.0);
+    world.objects[0]->setMaterial(mat1);
 
-    Material mat2 = world.objects[1]->GetMaterial();
-    mat2.ambient = 1.0;
-    world.objects[1]->SetMaterial(mat2);
+    Material mat2 = world.objects[1]->getMaterial();
+    mat2.setAmbient(1.0);
+    world.objects[1]->setMaterial(mat2);
 
     Tuple rayOrigin = Tuple::point(0, 0, 0.75);
     Tuple rayDirection = Tuple::vector(0, 0, -1);
@@ -102,7 +102,8 @@ TEST_CASE("The color with an intersection behind the ray") {
 
     Color color = world.colorAt(ray);
 
-    REQUIRE(color == world.objects[1]->GetMaterial().color);
+    Tuple dummyPoint = Tuple::point(0, 0, 0);
+    REQUIRE(color == world.objects[1]->getMaterial().getColor(dummyPoint));
 }
 
 TEST_CASE("There is no shadow when nothing is collinear with point and light") {

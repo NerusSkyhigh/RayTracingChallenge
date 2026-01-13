@@ -12,27 +12,43 @@
 #include "linalg/ViewTransform.h"
 #include "render/Camera.h"
 #include "render/Canvas.h"
-#include "../src/render/material/Material.h"
-#include "render/PointLight.h"
-#include "../src/scene/World.h"
-#include "../src/geometry/Plane.h"
-#include "../src/geometry/Sphere.h"
+#include "scene/material/Material.h"
+#include "scene/PointLight.h"
+#include "scene/World.h"
+#include "geometry/Plane.h"
+#include "geometry/Sphere.h"
+#include "scene/pattern/StripePattern.h"
 
 
 
 int main() {
-    Material floorMaterial;
-    floorMaterial.color = Color(1, 0.9, 0.9);
-    //floorMaterial.specular = 0;
 
+    auto zebra = std::make_unique<StripePattern>( Color::Black(), Color::White() );
+
+    Material floorMaterial;
+    floorMaterial.setColor( Color(1, 0.9, 0.9) );
+    floorMaterial.specular = 0;
 
     std::unique_ptr<Plane> floor = std::make_unique<Plane>();
-    floor->setTransform(Matrix::translation(0, -0.5, 0));
+    floor->setTransform(Matrix::translation(0, 0, 0));
     floor->setMaterial(floorMaterial);
+
+    Material backgroundMaterial;
+    backgroundMaterial.setMaterialPattern(zebra->clone() );
+    backgroundMaterial.specular = 0;
+
+    std::unique_ptr<Plane> background = std::make_unique<Plane>();
+    background->setTransform(
+        Matrix::translation(0, 0, 5) *
+        Matrix::rotationX(M_PI / 2)
+    );
+    background->setMaterial(backgroundMaterial);
+
+
 
 
     Material middleMaterial;
-    middleMaterial.color = Color(0.1, 1, 0.5);
+    middleMaterial.setMaterialPattern(zebra->clone() );
     middleMaterial.diffuse = 0.7;
     middleMaterial.specular = 0.3;
 
@@ -42,7 +58,7 @@ int main() {
 
 
     Material rightMaterial;
-    rightMaterial.color = Color(0.5, 1, 0.1);
+    rightMaterial.setColor( Color(0.5, 1, 0.1) );
     rightMaterial.diffuse = 0.7;
     rightMaterial.specular = 0.3;
 
@@ -55,7 +71,7 @@ int main() {
 
 
     Material leftMaterial;
-    leftMaterial.color = Color(1, 0.8, 0.1);
+    leftMaterial.setColor( Color(1, 0.8, 0.1) );
     leftMaterial.diffuse = 0.7;
     leftMaterial.specular = 0.3;
 
@@ -77,6 +93,7 @@ int main() {
 
     World world;
     world.addObject(std::move(floor) );
+    world.addObject(std::move(background));
 
     world.addObject(std::move(middle));
     world.addObject(std::move(right));
@@ -95,7 +112,7 @@ int main() {
     camera.SetViewTransform(viewTransform);
 
     Canvas image = camera.render(world);
-    image.ToPPMFile("../cp9_SpheresOnAPlane.ppm");
+    image.ToPPMFile("../cp10_Patterns.ppm");
 
     return 0;
 }

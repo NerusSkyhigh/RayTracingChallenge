@@ -1,4 +1,4 @@
-#include "../src/renderer/Ray.h"
+#include "../src/geometry/Ray.h"
 #include "catch2/catch_test_macros.hpp"
 
 TEST_CASE("Creating and querying a ray") {

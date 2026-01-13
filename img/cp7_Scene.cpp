@@ -10,12 +10,12 @@
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
 #include "linalg/ViewTransform.h"
-#include "renderer/Camera.h"
-#include "renderer/Canvas.h"
-#include "renderer/Material.h"
-#include "renderer/PointLight.h"
-#include "renderer/World.h"
-#include "shapes/Sphere.h"
+#include "render/Camera.h"
+#include "render/Canvas.h"
+#include "../src/render/material/Material.h"
+#include "render/PointLight.h"
+#include "../src/scene/World.h"
+#include "../src/geometry/Sphere.h"
 
 
 
@@ -26,28 +26,28 @@ int main() {
 
 
     std::unique_ptr<Sphere> floor = std::make_unique<Sphere>();
-    floor->SetTransform(Matrix::scaling(10, 0.01, 10));
-    floor->SetMaterial(floorMaterial);
+    floor->setTransform(Matrix::scaling(10, 0.01, 10));
+    floor->setMaterial(floorMaterial);
 
 
     auto leftWall = std::make_unique<Sphere>();
-    leftWall->SetTransform(
+    leftWall->setTransform(
         Matrix::translation(0, 0, 5) *
         Matrix::rotationY(-M_PI / 4) *
         Matrix::rotationX(M_PI / 2) *
         Matrix::scaling(10, 0.01, 10)
     );
-    leftWall->SetMaterial(floorMaterial);
+    leftWall->setMaterial(floorMaterial);
 
 
     auto rightWall = std::make_unique<Sphere>();
-    rightWall->SetTransform(
+    rightWall->setTransform(
         Matrix::translation(0, 0, 5) *
         Matrix::rotationY(M_PI / 4) *
         Matrix::rotationX(M_PI / 2) *
         Matrix::scaling(10, 0.01, 10)
     );
-    rightWall->SetMaterial(floorMaterial);
+    rightWall->setMaterial(floorMaterial);
 
 
     Material middleMaterial;
@@ -56,8 +56,8 @@ int main() {
     middleMaterial.specular = 0.3;
 
     auto middle = std::make_unique<Sphere>();
-    middle->SetTransform(Matrix::translation(-0.5, 1, 0.5));
-    middle->SetMaterial(middleMaterial);
+    middle->setTransform(Matrix::translation(-0.5, 1, 0.5));
+    middle->setMaterial(middleMaterial);
 
 
     Material rightMaterial;
@@ -66,11 +66,11 @@ int main() {
     rightMaterial.specular = 0.3;
 
     auto right = std::make_unique<Sphere>();
-    right->SetTransform(
+    right->setTransform(
         Matrix::translation(1.5, 0.5, -0.5) *
         Matrix::scaling(0.5, 0.5, 0.5)
     );
-    right->SetMaterial(rightMaterial);
+    right->setMaterial(rightMaterial);
 
 
     Material leftMaterial;
@@ -79,11 +79,11 @@ int main() {
     leftMaterial.specular = 0.3;
 
     auto left = std::make_unique<Sphere>();
-    left->SetTransform(
+    left->setTransform(
         Matrix::translation(-1.5, 0.33, -0.75) *
         Matrix::scaling(0.33, 0.33, 0.33)
     );
-    left->SetMaterial(leftMaterial);
+    left->setMaterial(leftMaterial);
 
 
 

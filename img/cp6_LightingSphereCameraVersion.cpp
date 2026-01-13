@@ -14,7 +14,7 @@
 #include "linalg/Matrix.h"
 #include "renderer/Canvas.h"
 #include "renderer/Ray.h"
-#include "renderer/Material.h"
+#include "../src/renderer/materials/Material.h"
 #include "renderer/PointLight.h"
 #include "renderer/World.h"
 #include "renderer/Camera.h"

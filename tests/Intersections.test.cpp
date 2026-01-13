@@ -1,8 +1,8 @@
 #include "catch2/catch_test_macros.hpp"
 
-#include "renderer/Ray.h"
-#include "shapes/Sphere.h"
-#include "shapes/Intersections.h"
+#include "../src/geometry/Ray.h"
+#include "../src/geometry/Sphere.h"
+#include "../src/geometry/Intersections.h"
 
 
 TEST_CASE("A ray intersects a sphere at two points") {
@@ -12,7 +12,7 @@ TEST_CASE("A ray intersects a sphere at two points") {
     Intersections xs;
     sphere.intersect(ray, xs);
 
-    REQUIRE(xs.size == 2);
+    REQUIRE(xs.getSize() == 2);
     REQUIRE(APPROX_EQUAL(xs[0].t, 4.0));
     REQUIRE(APPROX_EQUAL(xs[1].t, 6.0));
 }
@@ -24,7 +24,7 @@ TEST_CASE("A ray intersects a sphere at a tangent") {
     Intersections xs;
     sphere.intersect(ray, xs);
 
-    REQUIRE(xs.size == 2);
+    REQUIRE(xs.getSize() == 2);
     REQUIRE( APPROX_EQUAL(xs[0].t, 5.0) );
     REQUIRE( APPROX_EQUAL(xs[1].t, 5.0) );
 }
@@ -36,7 +36,7 @@ TEST_CASE("A ray misses a sphere") {
     Intersections xs;
     sphere.intersect(ray, xs);
 
-    REQUIRE(xs.size == 0);
+    REQUIRE(xs.getSize() == 0);
 }
 
 TEST_CASE("A ray originates inside a sphere") {
@@ -46,7 +46,7 @@ TEST_CASE("A ray originates inside a sphere") {
     Intersections xs;
     sphere.intersect(ray, xs);
 
-    REQUIRE(xs.size == 2);
+    REQUIRE(xs.getSize() == 2);
     REQUIRE(APPROX_EQUAL(xs[0].t, -1.0));
     REQUIRE(APPROX_EQUAL(xs[1].t, 1.0));
 }
@@ -58,7 +58,7 @@ TEST_CASE("A sphere is behind a ray") {
     Intersections xs;
     sphere.intersect(ray, xs);
 
-    REQUIRE(xs.size == 2);
+    REQUIRE(xs.getSize() == 2);
     REQUIRE(APPROX_EQUAL(xs[0].t, -6.0));
     REQUIRE(APPROX_EQUAL(xs[1].t, -4.0));
 }
@@ -77,7 +77,7 @@ TEST_CASE("An intersection encapsulates t and object") {
 TEST_CASE("The hit should offset the point") {
     Ray ray(Tuple::point(0, 0, -5), Tuple::vector(0, 0, 1));
     Sphere sphere;
-    sphere.SetTransform(Matrix::translation(0, 0, 1));
+    sphere.setTransform(Matrix::translation(0, 0, 1));
 
     Intersections xs;
     sphere.intersect(ray, xs);

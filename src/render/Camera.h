@@ -5,7 +5,7 @@
 
 #include "linalg/Matrix.h"
 #include "linalg/ViewTransform.h"
-#include "Ray.h"
+#include "../geometry/Ray.h"
 #include "Canvas.h"
 
 class Camera {

@@ -1,4 +1,5 @@
 //
 // Created by Gugli on 04/01/2026.
 //
-#include "Intersections.h"
+
+#include "PointLight.h"

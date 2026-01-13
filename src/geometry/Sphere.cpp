@@ -3,13 +3,13 @@
 //
 
 #include "Sphere.h"
-#include "renderer/Ray.h"
+#include "Ray.h"
 #include "Intersections.h"
 #include "linalg/Tuple.h"
 
 void Sphere::intersect(const Ray& ray, Intersections& xs) const {
     // Transform the ray to object space (Sphere's Reference System - SRS)
-    Ray raySRS = ray.transform(this->GetInverseTransform());
+    Ray raySRS = ray.transform(this->getInverseTransform());
 
     Tuple sphereToRay = raySRS.origin - Tuple::point(0, 0, 0); // Sphere at origin
 

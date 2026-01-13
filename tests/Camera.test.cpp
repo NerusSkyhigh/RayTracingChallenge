@@ -5,7 +5,7 @@
 
 
 #include "linalg/macros.h"
-#include "renderer/Camera.h"
+#include "render/Camera.h"
 
 TEST_CASE("Creating a camera") {
     int hsize = 160;

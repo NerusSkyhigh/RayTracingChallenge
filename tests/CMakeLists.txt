@@ -24,6 +24,7 @@ add_executable(raytracer_tests
         ViewTransform.test.cpp
         Camera.test.cpp
         Plane.test.cpp
+        Patterns.test.cpp
 )
 
 target_link_libraries(raytracer_tests

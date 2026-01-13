@@ -6,10 +6,10 @@
 #include <vector>
 #include <string>
 
-#include "World.h"
-#include "renderer/Color.h"
-#include "renderer/World.h"
-#include "shapes/Intersections.h"
+#include "../scene/World.h"
+#include "render/Color.h"
+#include "../scene/World.h"
+#include "../geometry/Intersections.h"
 
 class Canvas {
 public:

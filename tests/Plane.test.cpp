@@ -1,7 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 
-#include "shapes/Plane.h"
-#include "shapes/Intersections.h"
+#include "../src/geometry/Plane.h"
+#include "../src/geometry/Intersections.h"
 
 TEST_CASE("The normal of a plane is constant everywhere") {
     Plane p;
@@ -21,7 +21,7 @@ TEST_CASE("Intersecting a ray parallel to the plane") {
     Intersections xs;
     p.intersect(ray, xs);
 
-    REQUIRE(xs.size == 0);
+    REQUIRE(xs.getSize() == 0);
 }
 
 TEST_CASE("A ray intersecting the plane from above") {
@@ -34,7 +34,7 @@ TEST_CASE("A ray intersecting the plane from above") {
     Intersections xs;
     p.intersect(ray, xs);
 
-    REQUIRE(xs.size == 1);
+    REQUIRE(xs.getSize() == 1);
     REQUIRE( APPROX_EQUAL(xs[0].t, 1.0) );
     REQUIRE(*xs[0].object == p);
 }

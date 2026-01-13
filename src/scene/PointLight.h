@@ -5,7 +5,7 @@
 #pragma once
 
 #include "linalg/Tuple.h"
-#include "renderer/Color.h"
+#include "render/Color.h"
 
 class PointLight {
 public:

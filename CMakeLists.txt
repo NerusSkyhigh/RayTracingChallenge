@@ -59,3 +59,11 @@ target_link_libraries(cp9_SpheresOnAPlane
         PRIVATE
         raytracer
 )
+
+add_executable(cp10_Patterns
+    img/cp10_Patterns.cpp
+)
+target_link_libraries(cp10_Patterns
+    PRIVATE
+    raytracer
+)

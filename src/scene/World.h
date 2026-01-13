@@ -7,12 +7,10 @@
 #include <vector>
 
 #include "linalg/Tuple.h"
-#include "shapes/shape.h"
+#include "geometry/Shape.h"
 #include "PointLight.h"
-#include "Color.h"
-#include "Material.h"
-#include "shapes/Sphere.h"
-#include "shapes/Intersections.h"
+#include "render/Color.h"
+#include "geometry/Intersections.h"
 
 
 class World {

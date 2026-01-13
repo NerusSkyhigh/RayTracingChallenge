@@ -5,8 +5,8 @@
 
 #include "catch2/catch_test_macros.hpp"
 
-#include "renderer/Canvas.h"
-#include "renderer/Color.h"
+#include "render/Canvas.h"
+#include "render/Color.h"
 
 
 TEST_CASE("The canvas is made of pixels") {

@@ -5,10 +5,10 @@
 #include "linalg/macros.h"
 #include "World.h"
 
-#include "Color.h"
-#include "shapes/Intersections.h"
-#include "shapes/Shape.h"
-#include "shapes/Sphere.h"
+#include "../render/Color.h"
+#include "../geometry/Intersections.h"
+#include "../geometry/Shape.h"
+#include "../geometry/Sphere.h"
 
 bool World::isShadowed(const Tuple& point, const PointLight& pointLight) const {
 
@@ -47,7 +47,7 @@ Color World::shadeHit(const Hit& hit) const {
         return color;
     }
 
-    Material mat = hit.object->GetMaterial();
+    Material mat = hit.object->getMaterial();
 
     // Accumulate the contribution from each light source
     for (const auto& light : pointLights) {
@@ -76,18 +76,18 @@ World World::defaultWorld() {
 
     // Add the first sphere with specific material
     Material m1;
-    m1.color = Color(0.8, 1.0, 0.6);
-    m1.diffuse = 0.7;
-    m1.specular = 0.2;
+    m1.setColor( Color(0.8, 1.0, 0.6) );
+    m1.setDiffuse(0.7);
+    m1.setSpecular(0.2);
 
     auto s1 = std::make_unique<Sphere>();
-    s1->SetMaterial(m1);
+    s1->setMaterial(m1);
     w.objects.push_back(std::move(s1));
 
 
     // Add the second sphere with scaling transformation
     auto s2 = std::make_unique<Sphere>();
-    s2->SetTransform(Matrix::scaling(0.5, 0.5, 0.5));
+    s2->setTransform(Matrix::scaling(0.5, 0.5, 0.5));
     w.objects.push_back(std::move(s2));
 
     return w;

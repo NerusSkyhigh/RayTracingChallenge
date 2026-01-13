@@ -5,7 +5,7 @@
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
 #include "Shape.h"
-#include "renderer/Material.h"
+#include "scene/material/Material.h"
 
 
 /**@brief Represents a sphere in 3D space
@@ -18,14 +18,12 @@ private:
     Material material;
 
 public:
-    Tuple origin; // [TODO] Set this to (0,0,0)
+    Sphere():   transform(Matrix::identity(4)),
+                itransform(Matrix::identity(4)) {}
 
-
-    Sphere(): origin(Tuple::point(0,0,0)), transform(Matrix::identity(4)), itransform(Matrix::identity(4)) {}
-
-    Sphere(const Tuple origin) : origin(origin), transform(Matrix::identity(4)), itransform(Matrix::identity(4)) {}
-
-    Sphere(Material material) : origin(Tuple::point(0, 0, 0)), material(material), transform(Matrix::identity(4)), itransform(Matrix::identity(4)) {}
+    Sphere(const Material& material) : transform(Matrix::identity(4)),
+                                itransform(Matrix::identity(4)),
+                                material(material) {}
 
 
     bool operator==(const Shape& other) const override {
@@ -33,30 +31,32 @@ public:
         if (otherSphere == nullptr) {
             return false;
         }
-        bool sameOrigin = this->origin == origin;
-        bool sameTransform = this->transform == transform;
-        return sameOrigin && sameTransform;
+        bool sameTransform = this->transform == otherSphere->transform;
+        bool sameMaterial = this->material == otherSphere->getMaterial();
+        return sameTransform && sameMaterial;
     }
 
-    void SetTransform(const Matrix& m) override {
+
+
+    void setTransform(const Matrix& m) override {
         this->transform = m;
         this->itransform = m.inverse();
     }
 
     void addTransform(const Matrix& m) {
         Matrix newTransform = m * this->transform;
-        SetTransform(newTransform);
+        setTransform(newTransform);
     }
 
     void resetTransform() {
-        SetTransform(Matrix::identity(4));
+        setTransform(Matrix::identity(4));
     }
 
-    Matrix GetTransform() const override {
+    const Matrix& getTransform() const override {
         return this->transform;
     }
 
-    Matrix GetInverseTransform() const override {
+    const Matrix& getInverseTransform() const override {
         return this->itransform;
     }
 
@@ -70,29 +70,23 @@ public:
         // The difference between two points gives the correct
         // value of w for a vector.
 
-        ///Tuple n = p - Tuple::point(0, 0, 0);
-        //Matrix transform = this->GetInverseTransform().transpose();
-        //return (transform * n).normalize();
-
-        Tuple objectPoint = this->GetInverseTransform() * worldPoint;
+        Tuple objectPoint = this->getInverseTransform() * worldPoint;
         Tuple objectNormal = objectPoint - Tuple::point(0, 0, 0);
-        Tuple worldNormal = this->GetInverseTransform().transpose() * objectNormal;
+
+        Matrix localToWorld = this->getInverseTransform();
+        Tuple worldNormal = localToWorld.transpose() * objectNormal;
         worldNormal.w = 0;
         worldNormal = worldNormal.normalize();
 
         return worldNormal;
 
-        //Tuple n = p - Tuple::point(0, 0, 0);
-        //Matrix transform = this->GetInverseTransform().transpose();
-        //return transform * n.normalize();
-
     }
 
-    void SetMaterial(const Material& m) override {
+    void setMaterial(const Material& m) override {
         this->material = m;
     }
 
-    Material GetMaterial() const override {
+    const Material& getMaterial() const override {
         return this->material;
     }
 

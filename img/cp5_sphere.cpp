@@ -6,9 +6,9 @@
 
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
-#include "renderer/Canvas.h"
-#include "renderer/Ray.h"
-#include "shapes/Sphere.h"
+#include "render/Canvas.h"
+#include "../src/geometry/Ray.h"
+#include "../src/geometry/Sphere.h"
 #include "shapes/Hit.h"
 
 

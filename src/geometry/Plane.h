@@ -6,7 +6,7 @@
 
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
-#include "shapes/Shape.h"
+#include "geometry/Shape.h"
 
 
 class Plane : public Shape {
@@ -20,25 +20,29 @@ public:
     Plane() : transform(Matrix::identity(4)), itransform(Matrix::identity(4)) {};
     Plane(Material material) : material(material), transform(Matrix::identity(4)), itransform(Matrix::identity(4)) {};
 
-    void SetTransform(const Matrix& m) override {
+    void setTransform(const Matrix& m) override {
         this->transform = m;
         this->itransform = m.inverse();
     }
 
-    Matrix GetTransform() const override {
+    const Matrix& getTransform() const override {
         return this->transform;
     }
 
-    Matrix GetInverseTransform() const override {
+    const Matrix& getInverseTransform() const override {
         return this->itransform;
     }
 
-    void SetMaterial(const Material& material) override {
+    void setMaterial(const Material& material) override {
         this->material = material;
     }
 
-    Material GetMaterial() const override {
+    const Material& getMaterial() const override {
         return this->material;
+    }
+
+    Color getColorAt(const Tuple& localPoint) const {
+        return this->material.getColor(localPoint);
     }
 
     bool operator==(const Shape& other) const override {
@@ -46,7 +50,7 @@ public:
         if (otherSphere == nullptr) {
             return false;
         }
-        bool sameTransform = this->transform == otherSphere->GetTransform();
+        bool sameTransform = this->transform == otherSphere->getTransform();
         return sameTransform;
     }
 
@@ -56,8 +60,8 @@ public:
         Tuple objectNormal = Tuple::vector(0, 1, 0);
 
         // Transform the normal back to world space
-        Matrix invTrans = this->GetInverseTransform().transpose();
-        Tuple worldNormal = invTrans * objectNormal;
+        Matrix localToWorld = this->getInverseTransform();
+        Tuple worldNormal = localToWorld.transpose() * objectNormal;
         worldNormal.w = 0; // Ensure it's a vector
 
         return worldNormal.normalize();
@@ -65,7 +69,7 @@ public:
 
     void intersect(const Ray& ray, Intersections& xs) const override {
         // Transform the ray to object space (Plane's Reference System - PRS)
-        Ray rayPRS = ray.transform(this->GetInverseTransform());
+        Ray rayPRS = ray.transform(this->getInverseTransform());
 
         // Check if the ray is parallel to the plane ZX
         bool parallelToY = APPROX_EQUAL( std::abs(rayPRS.direction.y), 0);
@@ -84,6 +88,4 @@ public:
 
         xs.add(*this, t, ipoint, eyev, n);
     }
-
-bool operator==(int _cpp_par_) const;
 };

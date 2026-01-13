@@ -2,20 +2,20 @@
 #include <cmath>
 #include "catch2/catch_test_macros.hpp"
 
-#include "renderer/Ray.h"
-#include "shapes/Sphere.h"
+#include "../src/geometry/Ray.h"
+#include "../src/geometry/Sphere.h"
 
 TEST_CASE("A sphere default transform") {
     Sphere sphere;
     Matrix identity = Matrix::identity(4);
-    REQUIRE(sphere.GetTransform() == identity);
+    REQUIRE(sphere.getTransform() == identity);
 }
 
 TEST_CASE("Changing a sphere's transform") {
     Sphere s;
     Matrix translation = Matrix::translation(2, 3, 4);
-    s.SetTransform(translation);
-    REQUIRE(s.GetTransform() == translation);
+    s.setTransform(translation);
+    REQUIRE(s.getTransform() == translation);
 }
 
 TEST_CASE("Intersecting a scaled sphere with a ray") {
@@ -24,12 +24,12 @@ TEST_CASE("Intersecting a scaled sphere with a ray") {
     Ray ray(rayOrigin, rayDirection);
 
     Sphere sphere;
-    sphere.SetTransform(Matrix::scaling(2, 2, 2));
+    sphere.setTransform(Matrix::scaling(2, 2, 2));
 
     Intersections xs;
     sphere.intersect(ray, xs);
 
-    REQUIRE(xs.size == 2);
+    REQUIRE(xs.getSize() == 2);
     REQUIRE(APPROX_EQUAL(xs[0].t, 3.0));
     REQUIRE(APPROX_EQUAL(xs[1].t, 7.0));
 }
@@ -40,13 +40,13 @@ TEST_CASE("Intersecting a translated sphere with a ray") {
     Ray ray(rayOrigin, rayDirection);
 
     Sphere sphere;
-    sphere.SetTransform(Matrix::translation(5, 0, 0));
+    sphere.setTransform(Matrix::translation(5, 0, 0));
 
     Intersections xs;
-    Ray transformedRay = ray.transform( sphere.GetInverseTransform());
+    Ray transformedRay = ray.transform( sphere.getInverseTransform());
     sphere.intersect(transformedRay, xs);
 
-    REQUIRE(xs.size == 0);
+    REQUIRE(xs.getSize() == 0);
 }
 
 TEST_CASE("Computing the normal on a sphere at a point on the x axis") {
@@ -93,7 +93,7 @@ TEST_CASE("The normal is a normalized vector") {
 
 TEST_CASE("The normal on a translated sphere") {
     Sphere s;
-    s.SetTransform(Matrix::translation(0, 1, 0));
+    s.setTransform(Matrix::translation(0, 1, 0));
     double sqrt2 = std::sqrt(2) / 2;
     Tuple p = Tuple::point(0, 1 + sqrt2, -sqrt2);
     Tuple n = s.NormalAt(p);
@@ -105,7 +105,7 @@ TEST_CASE("Computing the normal on a transformed sphere") {
     Sphere s;
     Matrix scaling = Matrix::scaling(1, 0.5, 1);
     Matrix rotation = Matrix::rotationZ(M_PI / 5);
-    s.SetTransform(scaling * rotation);
+    s.setTransform(scaling * rotation);
 
     double val = std::sqrt(2) / 2;
     Tuple p = Tuple::point(0, val, -val);
@@ -117,13 +117,13 @@ TEST_CASE("Computing the normal on a transformed sphere") {
 TEST_CASE("A sphere has a default material") {
     Sphere s;
     Material m;
-    REQUIRE(s.GetMaterial() == m);
+    REQUIRE(s.getMaterial() == m);
 }
 
 TEST_CASE("A sphere may be assigned a material") {
     Sphere s;
     Material m;
-    m.ambient = 1.0;
-    s.SetMaterial(m);
-    REQUIRE(s.GetMaterial() == m);
+    m.setAmbient(1.0);
+    s.setMaterial(m);
+    REQUIRE(s.getMaterial() == m);
 }
