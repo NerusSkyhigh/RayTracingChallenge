@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "render/Color.h"
-#include "scene/PointLight.h"
+#include "light/PointLight.h"
 #include "scene/pattern/Pattern.h"
 #include "scene/pattern/Monocromatic.h"
 
@@ -41,6 +41,7 @@ public:
                     shininess(shininess),
                     pattern(std::make_unique<Monocromatic>(color)) {}
 
+
     Material& operator=(const Material& other) {
         if (this == &other) return *this;
         ambient   = other.getAmbient();
@@ -64,9 +65,9 @@ public:
     double getShininess() const { return shininess; }
 
     void setColor(const Color& color) { pattern = std::make_unique<Monocromatic>(color); }
-    Color getColor(const Tuple& position) const { return pattern->getColor(position); }
+    Color getColor(const Tuple& localPoint) const { return pattern->getColor(localPoint); }
 
-    void setMaterialPattern(std::unique_ptr<Pattern> p) { pattern = std::move(p); }
+    void setPattern(std::unique_ptr<Pattern> p) { pattern = std::move(p); }
     const Pattern& getPattern() const { return *pattern; }
 
     bool operator==(const Material& m) const {

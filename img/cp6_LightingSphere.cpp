@@ -11,10 +11,10 @@
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
 #include "render/Canvas.h"
-#include "../src/geometry/Ray.h"
-#include "../src/render/material/Material.h"
-#include "../src/scene/PointLight.h"
-#include "../src/geometry/Sphere.h"
+#include "geometry/Ray.h"
+#include "scene/material/Material.h"
+#include "scene/light/PointLight.h"
+#include "geometry/Sphere.h"
 
 
 Tuple CanvasPixelToWorld(int x, int y, Canvas canvas, Tuple canvasCenter, double pixelSize) {

@@ -13,7 +13,7 @@
 #include "render/Camera.h"
 #include "render/Canvas.h"
 #include "scene/material/Material.h"
-#include "scene/PointLight.h"
+#include "scene/light/PointLight.h"
 #include "scene/World.h"
 #include "geometry/Plane.h"
 #include "geometry/Sphere.h"
@@ -34,7 +34,7 @@ int main() {
     floor->setMaterial(floorMaterial);
 
     Material backgroundMaterial;
-    backgroundMaterial.setMaterialPattern(zebra->clone() );
+    backgroundMaterial.setPattern(zebra->clone() );
     backgroundMaterial.specular = 0;
 
     std::unique_ptr<Plane> background = std::make_unique<Plane>();
@@ -48,7 +48,7 @@ int main() {
 
 
     Material middleMaterial;
-    middleMaterial.setMaterialPattern(zebra->clone() );
+    middleMaterial.setPattern(zebra->clone() );
     middleMaterial.diffuse = 0.7;
     middleMaterial.specular = 0.3;
 

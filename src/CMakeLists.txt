@@ -25,12 +25,18 @@ target_include_directories(geometry PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # ---------------- Scene ----------------
 add_library(scene
         scene/World.cpp
-        scene/PointLight.cpp
+        scene/light/PointLight.cpp
         scene/material/Material.cpp
         scene/pattern/Pattern.cpp
         scene/pattern/StripePattern.cpp
         scene/pattern/Monocromatic.cpp
         scene/pattern/Monocromatic.h
+        scene/pattern/GradientPattern.cpp
+        scene/pattern/GradientPattern.h
+        scene/pattern/RingPattern.cpp
+        scene/pattern/RingPattern.h
+        scene/pattern/CheckerPattern.cpp
+        scene/pattern/CheckerPattern.h
 )
 
 target_link_libraries(scene PUBLIC geometry linalg)

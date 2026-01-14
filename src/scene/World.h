@@ -8,7 +8,7 @@
 
 #include "linalg/Tuple.h"
 #include "geometry/Shape.h"
-#include "PointLight.h"
+#include "light/PointLight.h"
 #include "render/Color.h"
 #include "geometry/Intersections.h"
 
