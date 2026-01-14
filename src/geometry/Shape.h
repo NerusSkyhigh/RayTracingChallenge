@@ -48,4 +48,11 @@ public:
     virtual void intersect(const Ray& ray, Intersections& xs) const = 0;
 
     virtual bool operator==(const Shape&) const = 0;
+
+    Color getLocalColor(const Tuple& localPoint) const { return getMaterial().getColor(localPoint); }
+    Color getWorldColor(const Tuple& worldPoint) const {
+        Matrix invTransform = getInverseTransform();
+        Tuple localPoint = invTransform * worldPoint;
+        return getLocalColor(localPoint);
+    }
 };
