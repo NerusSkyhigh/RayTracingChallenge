@@ -16,6 +16,7 @@ public:
 
     virtual Color getColor(Tuple localPoint) const = 0;
 
+    virtual const Matrix& getTransform() const = 0;
     virtual void setTransform(Matrix transform) = 0;
 
     virtual bool operator==(const Pattern& rhs) const = 0;

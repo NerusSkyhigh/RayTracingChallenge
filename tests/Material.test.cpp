@@ -1,7 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include "scene/material/Material.h"
-#include "scene/PointLight.h"
+#include "../src/scene/ligth/PointLight.h"
 #include "scene/World.h"
 #include "geometry/Sphere.h"
 #include "geometry/Intersections.h"
@@ -125,7 +125,7 @@ TEST_CASE("shadeHits() with an intersection in shadow") {
 
 TEST_CASE("Lighting with a pattern applied") {
     Material m;
-    m.setMaterialPattern( std::make_unique<StripePattern>(Color::White(), Color::Black()) );
+    m.setPattern( std::make_unique<StripePattern>(Color::White(), Color::Black()) );
     m.setAmbient(1);
     m.setDiffuse(0);
     m.setSpecular(0);

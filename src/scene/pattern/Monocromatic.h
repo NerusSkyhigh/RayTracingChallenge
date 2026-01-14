@@ -21,6 +21,11 @@ public:
         return color;
     }
 
+    const Matrix& getTransform() const override {
+        static Matrix identity = Matrix::identity(4);
+        return identity;
+    }
+
     void setTransform(Matrix transform) override {
         // A monochromatic pattern has no color
     };
