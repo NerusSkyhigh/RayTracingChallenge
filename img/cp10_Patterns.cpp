@@ -6,6 +6,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <memory>
+#include <chrono>
+#include <iostream>
 
 #include "linalg/Tuple.h"
 #include "linalg/Matrix.h"
@@ -17,25 +19,33 @@
 #include "scene/World.h"
 #include "geometry/Plane.h"
 #include "geometry/Sphere.h"
+#include "scene/pattern/CheckerPattern.h"
+#include "scene/pattern/GradientPattern.h"
 #include "scene/pattern/StripePattern.h"
 
 
 
 int main() {
 
-    auto zebra = std::make_unique<StripePattern>( Color::Black(), Color::White() );
+    auto checker = std::make_unique<CheckerPattern>( Color::White(), Color::Black() );
+    checker->setTransform( Matrix::scaling(1./8., 1, 1) );
+    auto monoGray = std::make_unique<Monocromatic>( Color::Gray() );
+    auto gradientChecker = std::make_unique<GradientPattern>( std::move(checker), std::move(monoGray) );
+    gradientChecker->setTransform( Matrix::rotationY(-M_PI / 2) *
+        Matrix::scaling(8, 1, 1) );
 
     Material floorMaterial;
-    floorMaterial.setColor( Color(1, 0.9, 0.9) );
-    floorMaterial.specular = 0;
+    floorMaterial.setPattern(gradientChecker->clone() );
+    floorMaterial.setSpecular(0);
 
     std::unique_ptr<Plane> floor = std::make_unique<Plane>();
     floor->setTransform(Matrix::translation(0, 0, 0));
     floor->setMaterial(floorMaterial);
 
+    auto zebra = std::make_unique<StripePattern>( Color::Black(), Color::White() );
     Material backgroundMaterial;
     backgroundMaterial.setPattern(zebra->clone() );
-    backgroundMaterial.specular = 0;
+    backgroundMaterial.setSpecular(0);
 
     std::unique_ptr<Plane> background = std::make_unique<Plane>();
     background->setTransform(
@@ -48,19 +58,31 @@ int main() {
 
 
     Material middleMaterial;
-    middleMaterial.setPattern(zebra->clone() );
-    middleMaterial.diffuse = 0.7;
-    middleMaterial.specular = 0.3;
+    middleMaterial.setColor(Color::Green());
+    middleMaterial.setDiffuse(0.7);
+    middleMaterial.setSpecular(0.3);
 
     auto middle = std::make_unique<Sphere>();
     middle->setTransform(Matrix::translation(-0.5, 1, 0.5));
     middle->setMaterial(middleMaterial);
 
 
+    auto btr = std::make_unique<GradientPattern>( Color::Blue(), Color::Red() );
+    btr->setTransform(Matrix::rotationZ(M_PI/4)*
+        Matrix::scaling(0.1, 0.1, 0.1) );
+
+    auto rtb = std::make_unique<Monocromatic>(Color::White());
+
+    auto rotatedZebra = std::make_unique<StripePattern>( std::move(btr), std::move(rtb) );
+    rotatedZebra->setTransform( Matrix::rotationX(M_PI / 4) *
+                                         Matrix::rotationZ(M_PI / 4) *
+                                         Matrix::scaling(0.1, 0.1, 0.1) );
+
     Material rightMaterial;
-    rightMaterial.setColor( Color(0.5, 1, 0.1) );
-    rightMaterial.diffuse = 0.7;
-    rightMaterial.specular = 0.3;
+    rightMaterial.setPattern(std::move(rotatedZebra));
+    //rightMaterial.setColor( Color(0.5, 1, 0.1) );
+    rightMaterial.setDiffuse(0.7);
+    rightMaterial.setDiffuse(0.3);
 
     auto right = std::make_unique<Sphere>();
     right->setTransform(
@@ -70,10 +92,14 @@ int main() {
     right->setMaterial(rightMaterial);
 
 
+
+
+
+    auto gradient = std::make_unique<GradientPattern>( Color::White(), Color::Black() );
     Material leftMaterial;
-    leftMaterial.setColor( Color(1, 0.8, 0.1) );
-    leftMaterial.diffuse = 0.7;
-    leftMaterial.specular = 0.3;
+    leftMaterial.setPattern(std::move(gradient) );
+    leftMaterial.setDiffuse(0.7);
+    leftMaterial.setSpecular(0.3);
 
     auto left = std::make_unique<Sphere>();
     left->setTransform(
@@ -111,7 +137,13 @@ int main() {
     );
     camera.SetViewTransform(viewTransform);
 
+    auto now = std::chrono::high_resolution_clock::now();
     Canvas image = camera.render(world);
+
+    auto later = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = later - now;
+    std::cout << "Render time: " << elapsed.count() << " seconds." << std::endl;
+
     image.ToPPMFile("../cp10_Patterns.ppm");
 
     return 0;
