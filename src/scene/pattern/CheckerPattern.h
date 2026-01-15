@@ -5,24 +5,40 @@
 #pragma once
 
 #include "Pattern.h"
+#include "scene/pattern/Monocromatic.h"
 #include "render/Color.h"
 
 
 class CheckerPattern : public Pattern {
 private:
-    Color colorA;
-    Color colorB;
+    std::unique_ptr<Pattern> a;
+    std::unique_ptr<Pattern> b;
     Matrix transform;
     Matrix itransform;
 
 public:
-    CheckerPattern(const Color& a, const Color& b) : colorA(a),
-                                                  colorB(b),
-                                                  transform(Matrix::identity(4)),
-                                                  itransform(Matrix::identity(4)){}
+    CheckerPattern() : a( std::make_unique<Monocromatic>(Color::White())),
+                        b( std::make_unique<Monocromatic>(Color::Black()) ),
+                        transform(Matrix::identity(4)),
+                        itransform(Matrix::identity(4)) {}
+
+    CheckerPattern(const Color& ca, const Color& cb) :  a( std::make_unique<Monocromatic>(ca) ),
+                                                        b( std::make_unique<Monocromatic>(cb) ),
+                                                        transform(Matrix::identity(4)),
+                                                        itransform(Matrix::identity(4)) {}
+
+    CheckerPattern(std::unique_ptr<Pattern> a, std::unique_ptr<Pattern> b) :    a( std::move(a) ),
+                                                                                b( std::move(b) ),
+                                                                                transform(Matrix::identity(4)),
+                                                                                itransform(Matrix::identity(4)){}
 
     std::unique_ptr<Pattern> clone() const override {
-        return std::make_unique<CheckerPattern>(*this);
+        auto p = std::make_unique<CheckerPattern>(
+            a->clone(),
+            b->clone()
+        );
+        p->setTransform(transform);
+        return p;
     }
 
     Color getColor(Tuple localPoint) const override {
@@ -33,7 +49,7 @@ public:
         int yi = static_cast<int>(std::floor( patternPoint.y ));
         int zi = static_cast<int>(std::floor( patternPoint.z ));
 
-        return (xi+yi+zi) % 2 == 0 ? colorA : colorB;
+        return (xi+yi+zi) % 2 == 0 ? a->getColor(patternPoint) : b->getColor(patternPoint);
     }
 
     virtual void setTransform(Matrix transform) {
@@ -47,13 +63,13 @@ public:
 
     virtual bool operator==(const Pattern& rhs) const {
         auto other = dynamic_cast<const CheckerPattern*>(&rhs);
-        if (other) {
+        if (!other) {
             return false;
         }
-        bool sameColorA = colorA == other->colorA;
-        bool sameColorB = colorB == other->colorB;
+        bool samePatternA = *a == *other->a;
+        bool samePatternB = *b == *other->b;
         bool sameTransform = transform == other->transform;
 
-        return sameColorA && sameColorB && sameTransform;
+        return samePatternA && samePatternB && sameTransform;
     }
 };
