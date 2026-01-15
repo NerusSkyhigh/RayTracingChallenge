@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "render/Color.h"
-#include "light/PointLight.h"
+#include "scene/light/PointLight.h"
 #include "scene/pattern/Pattern.h"
 #include "scene/pattern/Monocromatic.h"
 
