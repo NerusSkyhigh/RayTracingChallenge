@@ -23,6 +23,8 @@ public:
     static Color Blue()  { return Color(0.0, 0.0, 1.0); }
     static Color White() { return Color(1.0, 1.0, 1.0); }
     static Color Black() { return Color(0.0, 0.0, 0.0); }
+    static Color Yellow() { return Color(1.0, 1.0, 0.0); }
+    static Color Gray() { return Color(0.5, 0.5, 0.5); }
 
     bool operator==(const Color &other) const {
         bool compatibleX = APPROX_EQUAL(this->r, other.r);
